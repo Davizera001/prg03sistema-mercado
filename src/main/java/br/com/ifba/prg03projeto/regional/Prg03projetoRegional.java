@@ -11,6 +11,6 @@ package br.com.ifba.prg03projeto.regional;
 public class Prg03projetoRegional {
 
     public static void main(String[] args) {
-        System.out.println("Hello World!");
+        System.out.println("Sistema Regional da Sorte iniciado!!");
     }
 }
