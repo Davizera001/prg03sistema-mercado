@@ -10,4 +10,5 @@
         <maven.compiler.release>25</maven.compiler.release>
         <exec.mainClass>br.com.ifba.prg03projeto.regional.Prg03projetoRegional</exec.mainClass>
     </properties>
+    <name>prg03sistema-mercado</name>
 </project>
