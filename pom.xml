@@ -28,6 +28,7 @@
 	</scm>
 	<properties>
 		<java.version>17</java.version>
+                <start-class>br.com.ifba.prg03projeto.mercado.Prg03sistemaMercadoApplication</start-class>
 	</properties>
 	<dependencies>
 		<dependency>
