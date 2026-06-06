@@ -24,9 +24,36 @@ Sistema acadêmico em Java com Spring Boot para gerenciamento de produtos de um 
 
 ## CRUD Produto
 
-### Cadastrar produto
+### Cadastrar produto (POST)
 
 ```bash
 curl -X POST http://localhost:8080/produtos \
 -H "Content-Type: application/json" \
 -d '{"nome":"Arroz","codigoBarras":"789123","preco":25.90,"estoqueMinimo":10}'
+```
+
+### Listar produtos (GET)
+
+```bash
+curl http://localhost:8080/produtos
+```
+
+### Buscar produto por ID (GET)
+
+```bash
+curl http://localhost:8080/produtos/1
+```
+
+### Atualizar produto (PUT)
+
+```bash
+curl -X PUT http://localhost:8080/produtos/1 \
+-H "Content-Type: application/json" \
+-d '{"nome":"Arroz Integral","codigoBarras":"789123","preco":29.90,"estoqueMinimo":12}'
+```
+
+### Remover produto (DELETE)
+
+```bash
+curl -X DELETE http://localhost:8080/produtos/1
+```
