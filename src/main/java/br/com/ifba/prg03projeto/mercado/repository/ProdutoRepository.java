@@ -4,6 +4,10 @@
  */
 package br.com.ifba.prg03projeto.mercado.repository;
 
+
+// Importa List para retornar uma lista de produtos.
+import java.util.List;
+
 // importando a entidade Produto.
 import br.com.ifba.prg03projeto.mercado.entity.Produto;
 
@@ -26,6 +30,9 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface ProdutoRepository extends JpaRepository<Produto,Long> {
+    
+    // Busca produtos pelo nome, ignorando letras maiúsculas e minúsculas.
+    List<Produto> findByNomeContainingIgnoreCase(String nome);
 
     /*
      * O JpaRepository disponibiliza automaticamente

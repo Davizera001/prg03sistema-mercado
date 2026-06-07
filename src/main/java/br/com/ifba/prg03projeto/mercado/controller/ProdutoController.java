@@ -25,6 +25,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+// Importa RequestParam para receber parâmetros pela URL.
+import org.springframework.web.bind.annotation.RequestParam;
 
 
 /**
@@ -52,11 +54,18 @@ public class ProdutoController {
         return produtoService.salvar(produto);
     }
 
-    // Rota para listar todos os produtos cadastrados.
-    @GetMapping
-    public List<Produto> listarTodos() {
-        return produtoService.listarTodos();
+    // Rota para listar todos os produtos ou buscar produtos pelo nome.
+@GetMapping
+public List<Produto> listarTodos(@RequestParam(required = false) String nome) {
+
+    // Se o parâmetro nome for informado, busca produtos pelo nome.
+    if (nome != null && !nome.trim().isEmpty()) {
+        return produtoService.buscarPorNome(nome);
     }
+
+    // Se nenhum nome for informado, lista todos os produtos.
+    return produtoService.listarTodos();
+}
 
     // Rota para buscar um produto pelo ID.
     @GetMapping("/{id}")

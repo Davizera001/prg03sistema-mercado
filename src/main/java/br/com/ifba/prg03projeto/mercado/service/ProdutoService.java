@@ -50,6 +50,18 @@ public class ProdutoService {
     public Optional<Produto> buscarPorId(Long id) {
         return produtoRepository.findById(id);
     }
+    
+    // Busca produtos pelo nome.
+    public List<Produto> buscarPorNome(String nome) {
+
+        // Se o campo de busca estiver vazio, retorna todos os produtos.
+        if (nome == null || nome.trim().isEmpty()) {
+            return produtoRepository.findAll();
+        }
+
+        // Busca produtos que contenham o texto informado no nome.
+        return produtoRepository.findByNomeContainingIgnoreCase(nome);
+    }
 
     // Remove um produto pelo ID.
     public void deletar(Long id) {
