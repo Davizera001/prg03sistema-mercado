@@ -74,6 +74,7 @@ public class ProdutoListar extends javax.swing.JFrame {
 
         btnEditar.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         btnEditar.setText("Editar");
+        btnEditar.addActionListener(this::btnEditarActionPerformed);
 
         btnRemover.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         btnRemover.setText("Remover");
@@ -156,11 +157,11 @@ public class ProdutoListar extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void txtBuscaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBuscaActionPerformed
-        // TODO add your handling code here:
+
     }//GEN-LAST:event_txtBuscaActionPerformed
 
     private void btnAtualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtualizarActionPerformed
-        // TODO add your handling code here:
+
         // Atualiza os dados da tabela.
         carregarTabela();
 
@@ -174,7 +175,7 @@ public class ProdutoListar extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAtualizarActionPerformed
 
     private void btnPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPesquisarActionPerformed
-        // TODO add your handling code here:
+
         // Pega o texto digitado no campo de busca.
         String texto = txtBusca.getText();
 
@@ -183,7 +184,7 @@ public class ProdutoListar extends javax.swing.JFrame {
     }//GEN-LAST:event_btnPesquisarActionPerformed
 
     private void btnRemoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoverActionPerformed
-        // TODO add your handling code here:
+
         // Obtém a linha selecionada na tabela.
     int linha = tblProdutos.getSelectedRow();
 
@@ -232,8 +233,6 @@ public class ProdutoListar extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRemoverActionPerformed
 
     private void btnNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoActionPerformed
-        // TODO add your handling code here:
-        
         // Cria a tela de cadastro de produto.
         ProdutoSave tela = new ProdutoSave();
 
@@ -241,6 +240,56 @@ public class ProdutoListar extends javax.swing.JFrame {
         tela.setVisible(true);
         
     }//GEN-LAST:event_btnNovoActionPerformed
+
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+  
+         // Obtém a linha selecionada na tabela.
+    int linha = tblProdutos.getSelectedRow();
+
+    // Verifica se alguma linha foi selecionada.
+    if (linha >= 0) {
+
+        // Obtém o ID do produto selecionado na primeira coluna da tabela.
+        Long id = Long.parseLong(tblProdutos.getValueAt(linha, 0).toString());
+
+        // Busca o produto completo pelo ID usando o controller.
+        org.springframework.http.ResponseEntity<br.com.ifba.prg03projeto.mercado.entity.Produto> resposta =
+                produtoController.buscarPorId(id);
+
+        // Pega o produto que veio dentro da resposta.
+        br.com.ifba.prg03projeto.mercado.entity.Produto produtoEncontrado = resposta.getBody();
+
+        // Verifica se o produto foi encontrado.
+        if (produtoEncontrado != null) {
+
+            // Cria a tela de edição passando o produto encontrado.
+            ProdutoSave tela = new ProdutoSave(produtoEncontrado);
+
+            // Exibe a tela de edição.
+            tela.setVisible(true);
+
+        } else {
+
+            // Exibe mensagem caso o produto não exista mais no banco.
+            javax.swing.JOptionPane.showMessageDialog(
+                    this,
+                    "Produto não encontrado!",
+                    "Erro",
+                    javax.swing.JOptionPane.ERROR_MESSAGE
+            );
+        }
+
+    } else {
+
+        // Exibe aviso caso nenhuma linha tenha sido selecionada.
+        javax.swing.JOptionPane.showMessageDialog(
+                this,
+                "Selecione um produto para editar!",
+                "Aviso",
+                javax.swing.JOptionPane.WARNING_MESSAGE
+        );
+      }
+    }//GEN-LAST:event_btnEditarActionPerformed
 
     // Carrega todos os produtos cadastrados na tabela.
 private void carregarTabela() {
