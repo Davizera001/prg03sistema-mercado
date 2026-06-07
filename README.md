@@ -1,13 +1,17 @@
 # PRG03 Sistema Mercado
 
-Sistema acadêmico em Java com Spring Boot para gerenciamento de produtos de um mercado.
+Sistema acadêmico desenvolvido em Java com Spring Boot para gerenciamento de produtos de um mercado.
+
+O projeto possui uma API REST para o CRUD da entidade Produto e também uma interface gráfica em Swing conectada ao banco de dados online.
 
 ## Sprint 1
 
 ### Itens entregues
 
 - Diagrama de classes com mais de 8 relacionamentos
-- CRUD da entidade Produto
+- CRUD completo da entidade Produto
+- Interface gráfica em Swing para gerenciamento de produtos
+- API REST para Produto
 - Repositório no GitHub
 - Banco de dados online no Supabase PostgreSQL
 
@@ -21,39 +25,51 @@ Sistema acadêmico em Java com Spring Boot para gerenciamento de produtos de um 
 - Supabase
 - Lombok
 - Maven
+- Swing
 
-## CRUD Produto
+## Funcionalidades implementadas
 
-### Cadastrar produto (POST)
+### Produto
+
+- Cadastrar produto
+- Listar produtos
+- Pesquisar produtos por nome
+- Editar produto
+- Remover produto
+- Visualizar dados pela API REST
+
+## Banco de dados
+
+O sistema utiliza um banco de dados PostgreSQL hospedado no Supabase.
+
+A tabela principal implementada na Sprint 1 é:
+
+- Produto
+
+Campos da entidade Produto:
+
+- id
+- nome
+- codigoBarras
+- preco
+- estoqueMinimo
+
+## Interface gráfica
+
+A interface gráfica foi desenvolvida com Java Swing.
+
+Telas implementadas:
+
+- ProdutoListar
+- ProdutoSave
+
+A tela `ProdutoListar` permite listar, pesquisar, editar, remover e abrir o cadastro de produtos.
+
+A tela `ProdutoSave` permite cadastrar novos produtos e editar produtos existentes.
+
+## API REST
+
+A API pode ser acessada localmente em:
 
 ```bash
-curl -X POST http://localhost:8080/produtos \
--H "Content-Type: application/json" \
--d '{"nome":"Arroz","codigoBarras":"789123","preco":25.90,"estoqueMinimo":10}'
-```
-
-### Listar produtos (GET)
-
-```bash
-curl http://localhost:8080/produtos
-```
-
-### Buscar produto por ID (GET)
-
-```bash
-curl http://localhost:8080/produtos/1
-```
-
-### Atualizar produto (PUT)
-
-```bash
-curl -X PUT http://localhost:8080/produtos/1 \
--H "Content-Type: application/json" \
--d '{"nome":"Arroz Integral","codigoBarras":"789123","preco":29.90,"estoqueMinimo":12}'
-```
-
-### Remover produto (DELETE)
-
-```bash
-curl -X DELETE http://localhost:8080/produtos/1
-```
+http://localhost:8080/produtos
