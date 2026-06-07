@@ -66,6 +66,7 @@ public class ProdutoListar extends javax.swing.JFrame {
         btnPesquisar.addActionListener(this::btnPesquisarActionPerformed);
 
         btnNovo.setText("+");
+        btnNovo.addActionListener(this::btnNovoActionPerformed);
 
         btnAtualizar.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         btnAtualizar.setText("Atualizar");
@@ -229,6 +230,17 @@ public class ProdutoListar extends javax.swing.JFrame {
     );
     }
     }//GEN-LAST:event_btnRemoverActionPerformed
+
+    private void btnNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoActionPerformed
+        // TODO add your handling code here:
+        
+        // Cria a tela de cadastro de produto.
+        ProdutoSave tela = new ProdutoSave();
+
+        // Exibe a tela para o usuário.
+        tela.setVisible(true);
+        
+    }//GEN-LAST:event_btnNovoActionPerformed
 
     // Carrega todos os produtos cadastrados na tabela.
 private void carregarTabela() {
