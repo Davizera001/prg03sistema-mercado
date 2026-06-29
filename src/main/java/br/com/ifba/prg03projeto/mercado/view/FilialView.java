@@ -10,13 +10,71 @@ package br.com.ifba.prg03projeto.mercado.view;
  */
 public class FilialView extends javax.swing.JFrame {
     
+    // Controller usado para acessar as operações de Filial.
+private br.com.ifba.prg03projeto.mercado.controller.FilialController filialController;
+
+    // Guarda a filial selecionada quando a tela estiver no modo de edição.
+private br.com.ifba.prg03projeto.mercado.entity.Filial filialEdicao;
+    
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FilialView.class.getName());
 
     /**
      * Creates new form FilialView
      */
+    
+    // Carrega todas as filiais cadastradas na tabela.
+    private void carregarTabela() {
+
+    // Obtém o modelo da tabela.
+    javax.swing.table.DefaultTableModel modelo =
+            (javax.swing.table.DefaultTableModel) tblFiliais.getModel();
+
+    // Remove as linhas antigas da tabela.
+    modelo.setRowCount(0);
+
+    // Busca todas as filiais usando o controller.
+    java.util.List<br.com.ifba.prg03projeto.mercado.entity.Filial> lista =
+            filialController.listarTodos();
+
+    // Percorre as filiais encontradas.
+    for (br.com.ifba.prg03projeto.mercado.entity.Filial filial : lista) {
+
+        // Adiciona cada filial como uma linha da tabela.
+        modelo.addRow(new Object[]{
+            filial.getId(),
+            filial.getNome(),
+            filial.getEndereco()
+        });
+    }
+}
+
+    // Limpa os campos e encerra o modo de edição.
+    private void limparCampos() {
+
+    // Limpa os campos do formulário.
+    txtNome.setText("");
+    txtEndereco.setText("");
+
+    // Indica que nenhum registro está sendo editado.
+    filialEdicao = null;
+
+    // Coloca o cursor no campo nome.
+    txtNome.requestFocus();
+}
+    
     public FilialView() {
-        initComponents();
+       // Inicializa os componentes visuais da tela.
+    initComponents();
+
+    // Busca o FilialController dentro do contexto do Spring.
+    filialController = br.com.ifba.prg03projeto.mercado.Prg03sistemaMercadoApplication.contexto
+            .getBean(br.com.ifba.prg03projeto.mercado.controller.FilialController.class);
+
+    // Inicialmente a tela não está editando nenhuma filial.
+    filialEdicao = null;
+
+    // Carrega as filiais cadastradas na tabela.
+    carregarTabela();
     }
 
     /**
@@ -28,21 +86,349 @@ public class FilialView extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
+        lblTitulo = new javax.swing.JLabel();
+        txtNome = new javax.swing.JTextField();
+        lblNome = new javax.swing.JLabel();
+        lblEndereco = new javax.swing.JLabel();
+        txtEndereco = new javax.swing.JTextField();
+        btnSalvar = new javax.swing.JButton();
+        btnLimpar = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tblFiliais = new javax.swing.JTable();
+        sepFormularioTabela = new javax.swing.JSeparator();
+        btnAtualizar = new javax.swing.JButton();
+        btnRemover = new javax.swing.JButton();
+        btnEditar = new javax.swing.JButton();
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(jTable1);
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+
+        lblTitulo.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        lblTitulo.setText("GERENCIAMENTO DE FILIAIS");
+
+        lblNome.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        lblNome.setText("Nome:");
+
+        lblEndereco.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        lblEndereco.setText("Endereço:");
+
+        btnSalvar.setText("SALVAR");
+        btnSalvar.addActionListener(this::btnSalvarActionPerformed);
+
+        btnLimpar.setText("LIMPAR");
+        btnLimpar.addActionListener(this::btnLimparActionPerformed);
+
+        tblFiliais.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
+            },
+            new String [] {
+                "ID", "Nome", "Endereço"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane2.setViewportView(tblFiliais);
+
+        btnAtualizar.setText("ATUALIZAR");
+        btnAtualizar.addActionListener(this::btnAtualizarActionPerformed);
+
+        btnRemover.setText("REMOVER");
+        btnRemover.addActionListener(this::btnRemoverActionPerformed);
+
+        btnEditar.setText("EDITAR");
+        btnEditar.addActionListener(this::btnEditarActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(sepFormularioTabela)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(181, 181, 181)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(91, 91, 91)
+                                .addComponent(lblTitulo))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(lblEndereco)
+                                    .addComponent(lblNome))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(btnSalvar)
+                                        .addGap(48, 48, 48)
+                                        .addComponent(btnLimpar))
+                                    .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, 266, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtEndereco, javax.swing.GroupLayout.PREFERRED_SIZE, 265, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 142, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 510, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(124, 124, 124))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(btnAtualizar)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnEditar)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnRemover)
+                        .addGap(240, 240, 240))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(47, 47, 47)
+                .addComponent(lblTitulo)
+                .addGap(31, 31, 31)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblNome))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblEndereco)
+                    .addComponent(txtEndereco, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(44, 44, 44)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnSalvar)
+                    .addComponent(btnLimpar))
+                .addGap(42, 42, 42)
+                .addComponent(sepFormularioTabela, javax.swing.GroupLayout.PREFERRED_SIZE, 11, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(33, 33, 33)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnEditar)
+                    .addComponent(btnRemover)
+                    .addComponent(btnAtualizar))
+                .addContainerGap(84, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparActionPerformed
+         // Limpa os campos do formulário.
+        limparCampos();
+    }//GEN-LAST:event_btnLimparActionPerformed
+
+    private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
+    
+        try {
+
+        // Verifica se os campos obrigatórios foram preenchidos.
+        if (txtNome.getText().isBlank()) {
+            throw new RuntimeException("O nome da filial é obrigatório.");
+        }
+
+        if (txtEndereco.getText().isBlank()) {
+            throw new RuntimeException("O endereço da filial é obrigatório.");
+        }
+
+        // Cria uma nova filial ou usa a filial em edição.
+        br.com.ifba.prg03projeto.mercado.entity.Filial filial;
+
+        if (filialEdicao == null) {
+            filial = new br.com.ifba.prg03projeto.mercado.entity.Filial();
+        } else {
+            filial = filialEdicao;
+        }
+
+        // Preenche os dados da filial.
+        filial.setNome(txtNome.getText());
+        filial.setEndereco(txtEndereco.getText());
+
+        // Salva a filial.
+        filialController.salvar(filial);
+
+        // Atualiza a tabela.
+        carregarTabela();
+
+        // Limpa os campos.
+        limparCampos();
+
+        // Exibe mensagem de sucesso.
+        javax.swing.JOptionPane.showMessageDialog(
+                this,
+                "Filial salva com sucesso!",
+                "Sucesso",
+                javax.swing.JOptionPane.INFORMATION_MESSAGE
+        );
+
+    } catch (Exception e) {
+
+        // Exibe mensagem de erro.
+        javax.swing.JOptionPane.showMessageDialog(
+                this,
+                "Erro ao salvar filial: " + e.getMessage(),
+                "Erro",
+                javax.swing.JOptionPane.ERROR_MESSAGE
+        );
+    }
+        
+    }//GEN-LAST:event_btnSalvarActionPerformed
+
+    private void btnAtualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtualizarActionPerformed
+     // Recarrega os dados da tabela.
+    carregarTabela();
+
+    // Exibe mensagem para o usuário.
+    javax.swing.JOptionPane.showMessageDialog(
+            this,
+            "Filiais atualizadas com sucesso!",
+            "Informação",
+            javax.swing.JOptionPane.INFORMATION_MESSAGE
+    );
+    
+    }//GEN-LAST:event_btnAtualizarActionPerformed
+
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+    // Obtém a linha selecionada.
+    int linha = tblFiliais.getSelectedRow();
+
+    // Verifica se uma filial foi selecionada.
+    if (linha >= 0) {
+
+        // Obtém o ID da filial selecionada.
+        Long id = Long.parseLong(
+                tblFiliais.getValueAt(linha, 0).toString()
+        );
+
+        // Busca a filial no banco.
+        org.springframework.http.ResponseEntity<br.com.ifba.prg03projeto.mercado.entity.Filial> resposta =
+                filialController.buscarPorId(id);
+
+        // Obtém a filial da resposta.
+        br.com.ifba.prg03projeto.mercado.entity.Filial filial =
+                resposta.getBody();
+
+        // Verifica se a filial foi encontrada.
+        if (filial != null) {
+
+            // Guarda a filial para edição.
+            filialEdicao = filial;
+
+            // Preenche os campos.
+            txtNome.setText(filial.getNome());
+            txtEndereco.setText(filial.getEndereco());
+
+            // Coloca o cursor no campo nome.
+            txtNome.requestFocus();
+
+        } else {
+
+            javax.swing.JOptionPane.showMessageDialog(
+                    this,
+                    "Filial não encontrada!",
+                    "Erro",
+                    javax.swing.JOptionPane.ERROR_MESSAGE
+            );
+        }
+
+    } else {
+
+        javax.swing.JOptionPane.showMessageDialog(
+                this,
+                "Selecione uma filial para editar!",
+                "Aviso",
+                javax.swing.JOptionPane.WARNING_MESSAGE
+        );
+    }
+    
+    }//GEN-LAST:event_btnEditarActionPerformed
+
+    private void btnRemoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoverActionPerformed
+    
+    // Obtém a linha selecionada.
+    int linha = tblFiliais.getSelectedRow();
+
+    // Verifica se uma filial foi selecionada.
+    if (linha >= 0) {
+
+        // Solicita confirmação.
+        int confirmacao = javax.swing.JOptionPane.showConfirmDialog(
+                this,
+                "Tem certeza que deseja remover esta filial?",
+                "Confirmação",
+                javax.swing.JOptionPane.YES_NO_OPTION
+        );
+
+        // Verifica a confirmação.
+        if (confirmacao == javax.swing.JOptionPane.YES_OPTION) {
+
+            // Obtém o ID selecionado.
+            Long id = Long.parseLong(
+                    tblFiliais.getValueAt(linha, 0).toString()
+            );
+
+            try {
+
+                // Remove a filial.
+                filialController.deletar(id);
+
+                // Atualiza a tabela.
+                carregarTabela();
+
+                // Limpa os campos.
+                limparCampos();
+
+                javax.swing.JOptionPane.showMessageDialog(
+                        this,
+                        "Filial removida com sucesso!",
+                        "Sucesso",
+                        javax.swing.JOptionPane.INFORMATION_MESSAGE
+                );
+
+            } catch (Exception e) {
+
+                javax.swing.JOptionPane.showMessageDialog(
+                        this,
+                        "Erro ao remover filial: " + e.getMessage(),
+                        "Erro",
+                        javax.swing.JOptionPane.ERROR_MESSAGE
+                );
+            }
+        }
+
+    } else {
+
+        javax.swing.JOptionPane.showMessageDialog(
+                this,
+                "Selecione uma filial para remover!",
+                "Aviso",
+                javax.swing.JOptionPane.WARNING_MESSAGE
+        );
+    }    
+        
+    }//GEN-LAST:event_btnRemoverActionPerformed
 
     /**
      * @param args the command line arguments
@@ -70,5 +456,20 @@ public class FilialView extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAtualizar;
+    private javax.swing.JButton btnEditar;
+    private javax.swing.JButton btnLimpar;
+    private javax.swing.JButton btnRemover;
+    private javax.swing.JButton btnSalvar;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTable jTable1;
+    private javax.swing.JLabel lblEndereco;
+    private javax.swing.JLabel lblNome;
+    private javax.swing.JLabel lblTitulo;
+    private javax.swing.JSeparator sepFormularioTabela;
+    private javax.swing.JTable tblFiliais;
+    private javax.swing.JTextField txtEndereco;
+    private javax.swing.JTextField txtNome;
     // End of variables declaration//GEN-END:variables
 }

@@ -12,6 +12,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
+// Importa a anotação que impede a repetição infinita no JSON.
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 // Importa as anotações do Lombok.
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -41,6 +44,7 @@ public class EstoqueFilial {
      */
     @ManyToOne
     @JoinColumn(name = "filial_id", nullable = false)
+    @JsonBackReference
     private Filial filial;
 
     /*

@@ -12,6 +12,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 
+// Importa a anotação que controla a serialização do lado principal.
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 // Importa as coleções utilizadas pela entidade.
 import java.util.ArrayList;
 import java.util.List;
@@ -51,9 +54,10 @@ public class Filial {
      * remove do banco um estoque retirado da lista da filial.
      */
     @OneToMany(
-            mappedBy = "filial",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
+        mappedBy = "filial",
+        cascade = CascadeType.ALL,
+        orphanRemoval = true
     )
+    @JsonManagedReference
     private List<EstoqueFilial> estoques = new ArrayList<>();
 }
