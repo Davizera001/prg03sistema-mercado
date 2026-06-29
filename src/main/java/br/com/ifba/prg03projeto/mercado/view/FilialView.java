@@ -183,7 +183,7 @@ private br.com.ifba.prg03projeto.mercado.entity.Filial filialEdicao;
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(btnSalvar)
-                                        .addGap(48, 48, 48)
+                                        .addGap(18, 18, 18)
                                         .addComponent(btnLimpar))
                                     .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, 266, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(txtEndereco, javax.swing.GroupLayout.PREFERRED_SIZE, 265, javax.swing.GroupLayout.PREFERRED_SIZE))))

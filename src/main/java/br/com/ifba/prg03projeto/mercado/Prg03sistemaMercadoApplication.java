@@ -27,16 +27,10 @@ public class Prg03sistemaMercadoApplication {
 
         // Abre a tela de produtos depois que o Spring já iniciou.
         java.awt.EventQueue.invokeLater(() -> {
+
+            // Abre a tela principal do sistema.
             new ProdutoListar().setVisible(true);
-            
-        // Abre também a tela de filiais para teste.
-            new br.com.ifba.prg03projeto.mercado.view.FilialView().setVisible(true);    
         });
         
-        new br.com.ifba.prg03projeto.mercado.view.EstoqueFilialView()
-        .setVisible(true);
-        
-        new br.com.ifba.prg03projeto.mercado.view.SolicitacaoReposicaoView()
-        .setVisible(true);
     }
 }

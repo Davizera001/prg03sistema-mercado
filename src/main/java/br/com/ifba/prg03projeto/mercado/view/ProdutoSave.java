@@ -126,7 +126,7 @@ public class ProdutoSave extends javax.swing.JFrame {
                             .addComponent(txtEstoqueMinimo, javax.swing.GroupLayout.PREFERRED_SIZE, 265, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(btnSalvar)
-                                .addGap(76, 76, 76)
+                                .addGap(18, 18, 18)
                                 .addComponent(btnCancelar)))))
                 .addContainerGap(47, Short.MAX_VALUE))
         );

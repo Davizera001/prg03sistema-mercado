@@ -49,6 +49,9 @@ public class ProdutoListar extends javax.swing.JFrame {
         btnRemover = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblProdutos = new javax.swing.JTable();
+        btnFiliais = new javax.swing.JButton();
+        btnEstoques = new javax.swing.JButton();
+        btnSolicitacoes = new javax.swing.JButton();
 
         jLabel1.setText("jLabel1");
 
@@ -101,19 +104,21 @@ public class ProdutoListar extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(tblProdutos);
 
+        btnFiliais.setText("FILIAIS");
+        btnFiliais.addActionListener(this::btnFiliaisActionPerformed);
+
+        btnEstoques.setText("ESTOQUES");
+        btnEstoques.addActionListener(this::btnEstoquesActionPerformed);
+
+        btnSolicitacoes.setText("SOLICITAÇÕES");
+        btnSolicitacoes.addActionListener(this::btnSolicitacoesActionPerformed);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(93, 93, 93)
-                        .addComponent(btnAtualizar)
-                        .addGap(64, 64, 64)
-                        .addComponent(btnEditar)
-                        .addGap(81, 81, 81)
-                        .addComponent(btnRemover))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(70, 70, 70)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -129,8 +134,19 @@ public class ProdutoListar extends javax.swing.JFrame {
                         .addComponent(btnNovo))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(53, 53, 53)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 510, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(53, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnFiliais)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 510, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnEstoques)
+                            .addComponent(btnSolicitacoes)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(154, 154, 154)
+                        .addComponent(btnAtualizar)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnEditar)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnRemover)))
+                .addContainerGap(62, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -145,12 +161,18 @@ public class ProdutoListar extends javax.swing.JFrame {
                     .addComponent(btnNovo))
                 .addGap(33, 33, 33)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAtualizar)
                     .addComponent(btnEditar)
                     .addComponent(btnRemover))
-                .addGap(34, 34, 34))
+                .addGap(34, 34, 34)
+                .addComponent(btnFiliais)
+                .addGap(18, 18, 18)
+                .addComponent(btnEstoques)
+                .addGap(18, 18, 18)
+                .addComponent(btnSolicitacoes)
+                .addContainerGap(28, Short.MAX_VALUE))
         );
 
         pack();
@@ -291,6 +313,27 @@ public class ProdutoListar extends javax.swing.JFrame {
       }
     }//GEN-LAST:event_btnEditarActionPerformed
 
+    private void btnFiliaisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFiliaisActionPerformed
+    
+     // Abre a tela de gerenciamento de filiais.
+    new FilialView().setVisible(true);    
+        
+    }//GEN-LAST:event_btnFiliaisActionPerformed
+
+    private void btnEstoquesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEstoquesActionPerformed
+    
+        // Abre a tela de gerenciamento de estoques das filiais.
+    new EstoqueFilialView().setVisible(true);
+    
+    }//GEN-LAST:event_btnEstoquesActionPerformed
+
+    private void btnSolicitacoesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSolicitacoesActionPerformed
+    
+     // Abre a tela de solicitações de reposição.
+    new SolicitacaoReposicaoView().setVisible(true);    
+        
+    }//GEN-LAST:event_btnSolicitacoesActionPerformed
+
     // Carrega todos os produtos cadastrados na tabela.
 private void carregarTabela() {
 
@@ -375,9 +418,12 @@ private void carregarTabelaFiltro(String texto) {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAtualizar;
     private javax.swing.JButton btnEditar;
+    private javax.swing.JButton btnEstoques;
+    private javax.swing.JButton btnFiliais;
     private javax.swing.JButton btnNovo;
     private javax.swing.JButton btnPesquisar;
     private javax.swing.JButton btnRemover;
+    private javax.swing.JButton btnSolicitacoes;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblBusca;
