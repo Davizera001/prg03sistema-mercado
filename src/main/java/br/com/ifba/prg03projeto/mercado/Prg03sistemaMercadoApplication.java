@@ -1,7 +1,7 @@
 package br.com.ifba.prg03projeto.mercado;
 
 // Importa a tela principal de produtos.
-import br.com.ifba.prg03projeto.mercado.view.ProdutoListar;
+import br.com.ifba.prg03projeto.mercado.produto.view.ProdutoListar;
 
 // Importa o construtor da aplicação Spring Boot.
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -19,7 +19,7 @@ public class Prg03sistemaMercadoApplication {
     public static ConfigurableApplicationContext contexto;
 
     public static void main(String[] args) {
-
+        
         // Inicia o Spring Boot com suporte a interface gráfica Swing.
         contexto = new SpringApplicationBuilder(Prg03sistemaMercadoApplication.class)
                 .headless(false)

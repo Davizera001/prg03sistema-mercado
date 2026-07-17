@@ -2,7 +2,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package br.com.ifba.prg03projeto.mercado.view;
+package br.com.ifba.prg03projeto.mercado.produto.view;
+
+import br.com.ifba.prg03projeto.mercado.Prg03sistemaMercadoApplication;
+import br.com.ifba.prg03projeto.mercado.produto.controller.ProdutoController;
+import br.com.ifba.prg03projeto.mercado.produto.entity.Produto;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -10,47 +15,46 @@ package br.com.ifba.prg03projeto.mercado.view;
  */
 public class ProdutoSave extends javax.swing.JFrame {
     
-    // Controller usado para salvar e atualizar produtos.
-    private br.com.ifba.prg03projeto.mercado.controller.ProdutoController produtoController;
-
-    // Produto usado quando a tela estiver em modo de edição.
-    private br.com.ifba.prg03projeto.mercado.entity.Produto produtoEdicao;
+    
+    private final ProdutoController produtoController;
+    
+    private Produto produtoEdicao;    
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ProdutoSave.class.getName());
+    
+    private static ProdutoController getProdutoController() {
+        return Prg03sistemaMercadoApplication.contexto
+                .getBean(ProdutoController.class);
+    }
 
     /**
      * Creates new form ProdutoSave
      */
-    public ProdutoSave() {
-        
-    // Inicializa os componentes visuais da tela.
-    initComponents();
+     public ProdutoSave() {
+        this(null);
+     }
+     
+     private void preencherCampos(Produto produto) {
 
-    // Busca o ProdutoController dentro do contexto do Spring.
-    produtoController = br.com.ifba.prg03projeto.mercado.Prg03sistemaMercadoApplication.contexto
-            .getBean(br.com.ifba.prg03projeto.mercado.controller.ProdutoController.class);
-
-    // Define que a tela está cadastrando um novo produto.
-    produtoEdicao = null;
-    }
-    
-    public ProdutoSave(br.com.ifba.prg03projeto.mercado.entity.Produto produto) {
-
-    // Inicializa os componentes visuais da tela.
-    initComponents();
-
-    // Busca o ProdutoController dentro do contexto do Spring.
-    produtoController = br.com.ifba.prg03projeto.mercado.Prg03sistemaMercadoApplication.contexto
-            .getBean(br.com.ifba.prg03projeto.mercado.controller.ProdutoController.class);
-
-    // Guarda o produto que será editado.
-    produtoEdicao = produto;
-
-    // Preenche os campos da tela com os dados do produto.
     txtNome.setText(produto.getNome());
     txtCodigoBarras.setText(produto.getCodigoBarras());
     txtPreco.setText(String.valueOf(produto.getPreco()));
     txtEstoqueMinimo.setText(String.valueOf(produto.getEstoqueMinimo()));
+
+    }
+    
+    public ProdutoSave(Produto produto) {
+    
+        initComponents();
+
+        produtoController = getProdutoController();
+
+        produtoEdicao = produto;
+
+        if (produto != null) {
+            lblTitulo.setText("EDIÇÃO DE PRODUTO");
+            preencherCampos(produto);
+        }
 }
 
     /**
@@ -167,61 +171,49 @@ public class ProdutoSave extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
- 
         try {
+        Produto produto = new Produto();
 
-        // Cria uma variável para representar o produto que será salvo.
-        br.com.ifba.prg03projeto.mercado.entity.Produto produto;
-
-        // Se produtoEdicao for nulo, significa que estamos cadastrando um novo produto.
-        if (produtoEdicao == null) {
-            produto = new br.com.ifba.prg03projeto.mercado.entity.Produto();
-        } else {
-            // Se produtoEdicao não for nulo, significa que estamos editando um produto existente.
-            produto = produtoEdicao;
-        }
-
-        // Preenche o produto com os dados digitados na tela.
-        produto.setNome(txtNome.getText());
-        produto.setCodigoBarras(txtCodigoBarras.getText());
-        produto.setPreco(Double.parseDouble(txtPreco.getText()));
-        produto.setEstoqueMinimo(Integer.parseInt(txtEstoqueMinimo.getText()));
-
-        // Salva o produto usando o controller.
-        produtoController.salvar(produto);
-
-        // Exibe mensagem de sucesso.
-        javax.swing.JOptionPane.showMessageDialog(
-                this,
-                "Produto salvo com sucesso!",
-                "Sucesso",
-                javax.swing.JOptionPane.INFORMATION_MESSAGE
+        produto.setNome(txtNome.getText().trim());
+        produto.setCodigoBarras(txtCodigoBarras.getText().trim());
+        produto.setPreco(Double.valueOf(txtPreco.getText().trim()));
+        produto.setEstoqueMinimo(
+                Integer.valueOf(txtEstoqueMinimo.getText().trim())
         );
 
-        // Fecha a tela após salvar.
+        if (produtoEdicao == null) {
+            produtoController.save(produto);
+        } else {
+            produtoController.update(produtoEdicao.getId(), produto);
+        }
+
+        JOptionPane.showMessageDialog(
+                this,
+                produtoEdicao == null
+                        ? "Produto cadastrado com sucesso!"
+                        : "Produto atualizado com sucesso!",
+                "Sucesso",
+                JOptionPane.INFORMATION_MESSAGE
+        );
+
         this.dispose();
 
     } catch (NumberFormatException e) {
-
-        // Exibe erro se preço ou estoque forem digitados incorretamente.
-        javax.swing.JOptionPane.showMessageDialog(
+        JOptionPane.showMessageDialog(
                 this,
                 "Preço e estoque mínimo devem ser números válidos!",
                 "Erro",
-                javax.swing.JOptionPane.ERROR_MESSAGE
+                JOptionPane.ERROR_MESSAGE
         );
 
     } catch (Exception e) {
-
-        // Exibe erro genérico caso aconteça algum problema ao salvar.
-        javax.swing.JOptionPane.showMessageDialog(
+        JOptionPane.showMessageDialog(
                 this,
                 "Erro ao salvar produto: " + e.getMessage(),
                 "Erro",
-                javax.swing.JOptionPane.ERROR_MESSAGE
+                JOptionPane.ERROR_MESSAGE
         );
-    }
-        
+       }
     }//GEN-LAST:event_btnSalvarActionPerformed
 
     /**

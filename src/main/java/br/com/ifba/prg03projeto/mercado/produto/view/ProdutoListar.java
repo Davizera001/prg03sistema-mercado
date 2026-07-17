@@ -2,7 +2,17 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package br.com.ifba.prg03projeto.mercado.view;
+package br.com.ifba.prg03projeto.mercado.produto.view;
+
+import br.com.ifba.prg03projeto.mercado.Prg03sistemaMercadoApplication;
+import br.com.ifba.prg03projeto.mercado.produto.controller.ProdutoController;
+import br.com.ifba.prg03projeto.mercado.produto.entity.Produto;
+import br.com.ifba.prg03projeto.mercado.view.EstoqueFilialView;
+import br.com.ifba.prg03projeto.mercado.view.FilialView;
+import br.com.ifba.prg03projeto.mercado.view.SolicitacaoReposicaoView;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -10,8 +20,8 @@ package br.com.ifba.prg03projeto.mercado.view;
  */
 public class ProdutoListar extends javax.swing.JFrame {
     
-    // Controller usado para acessar as operações de Produto.
-    private br.com.ifba.prg03projeto.mercado.controller.ProdutoController produtoController;
+    
+    private final ProdutoController produtoController; 
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ProdutoListar.class.getName());
 
@@ -19,13 +29,12 @@ public class ProdutoListar extends javax.swing.JFrame {
      * Creates new form ProdutoListar
      */
     public ProdutoListar() {
-        // Inicializa os componentes visuais da tela.
-    initComponents();
-    // Busca o ProdutoController dentro do contexto do Spring.
-    produtoController = br.com.ifba.prg03projeto.mercado.Prg03sistemaMercadoApplication.contexto
-            .getBean(br.com.ifba.prg03projeto.mercado.controller.ProdutoController.class);
+    
+        initComponents();
 
-    // Carrega os produtos cadastrados na tabela.
+    produtoController = Prg03sistemaMercadoApplication.contexto
+            .getBean(ProdutoController.class);
+
     carregarTabela();
     }
 
@@ -179,7 +188,8 @@ public class ProdutoListar extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void txtBuscaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBuscaActionPerformed
-
+        
+         carregarTabelaFiltro(txtBusca.getText());
     }//GEN-LAST:event_txtBuscaActionPerformed
 
     private void btnAtualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtualizarActionPerformed
@@ -198,119 +208,96 @@ public class ProdutoListar extends javax.swing.JFrame {
 
     private void btnPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPesquisarActionPerformed
 
-        // Pega o texto digitado no campo de busca.
-        String texto = txtBusca.getText();
-
-        // Chama o método que carrega a tabela com filtro.
-        carregarTabelaFiltro(texto);
+        carregarTabelaFiltro(txtBusca.getText());
     }//GEN-LAST:event_btnPesquisarActionPerformed
 
     private void btnRemoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoverActionPerformed
 
-        // Obtém a linha selecionada na tabela.
     int linha = tblProdutos.getSelectedRow();
 
-    // Verifica se alguma linha foi selecionada.
-    if (linha >= 0) {
+    if (linha < 0) {
+        JOptionPane.showMessageDialog(
+                this,
+                "Selecione um produto para remover!",
+                "Aviso",
+                JOptionPane.WARNING_MESSAGE
+        );
+        return;
+    }
 
-    // Exibe uma caixa de confirmação antes de remover.
-    int confirmacao = javax.swing.JOptionPane.showConfirmDialog(
+    int confirmacao = JOptionPane.showConfirmDialog(
             this,
             "Tem certeza que deseja remover este produto?",
             "Confirmação",
-            javax.swing.JOptionPane.YES_NO_OPTION
+            JOptionPane.YES_NO_OPTION
     );
 
-    // Verifica se o usuário confirmou a remoção.
-    if (confirmacao == javax.swing.JOptionPane.YES_OPTION) {
+    if (confirmacao != JOptionPane.YES_OPTION) {
+        return;
+    }
 
-        // Obtém o ID do produto selecionado na primeira coluna da tabela.
-        Long id = Long.parseLong(tblProdutos.getValueAt(linha, 0).toString());
+    try {
+        Long id = Long.valueOf(tblProdutos.getValueAt(linha, 0).toString());
 
-        // Remove o produto usando o controller.
-        produtoController.deletar(id);
+        produtoController.delete(id);
 
-        // Atualiza a tabela após a remoção.
         carregarTabela();
 
-        // Exibe mensagem de sucesso.
-        javax.swing.JOptionPane.showMessageDialog(
+        JOptionPane.showMessageDialog(
                 this,
                 "Produto removido com sucesso!",
                 "Sucesso",
-                javax.swing.JOptionPane.INFORMATION_MESSAGE
+                JOptionPane.INFORMATION_MESSAGE
         );
-    }
 
-    } else {
-
-    // Exibe aviso caso nenhuma linha tenha sido selecionada.
-    javax.swing.JOptionPane.showMessageDialog(
-            this,
-            "Selecione um produto para remover!",
-            "Aviso",
-            javax.swing.JOptionPane.WARNING_MESSAGE
-    );
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(
+                this,
+                "Erro ao remover produto: " + e.getMessage(),
+                "Erro",
+                JOptionPane.ERROR_MESSAGE
+        );
     }
     }//GEN-LAST:event_btnRemoverActionPerformed
 
     private void btnNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoActionPerformed
-        // Cria a tela de cadastro de produto.
+       
         ProdutoSave tela = new ProdutoSave();
-
-        // Exibe a tela para o usuário.
+        tela.setLocationRelativeTo(this);
         tela.setVisible(true);
         
     }//GEN-LAST:event_btnNovoActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-  
-         // Obtém a linha selecionada na tabela.
-    int linha = tblProdutos.getSelectedRow();
+        
+        int linha = tblProdutos.getSelectedRow();
 
-    // Verifica se alguma linha foi selecionada.
-    if (linha >= 0) {
-
-        // Obtém o ID do produto selecionado na primeira coluna da tabela.
-        Long id = Long.parseLong(tblProdutos.getValueAt(linha, 0).toString());
-
-        // Busca o produto completo pelo ID usando o controller.
-        org.springframework.http.ResponseEntity<br.com.ifba.prg03projeto.mercado.entity.Produto> resposta =
-                produtoController.buscarPorId(id);
-
-        // Pega o produto que veio dentro da resposta.
-        br.com.ifba.prg03projeto.mercado.entity.Produto produtoEncontrado = resposta.getBody();
-
-        // Verifica se o produto foi encontrado.
-        if (produtoEncontrado != null) {
-
-            // Cria a tela de edição passando o produto encontrado.
-            ProdutoSave tela = new ProdutoSave(produtoEncontrado);
-
-            // Exibe a tela de edição.
-            tela.setVisible(true);
-
-        } else {
-
-            // Exibe mensagem caso o produto não exista mais no banco.
-            javax.swing.JOptionPane.showMessageDialog(
-                    this,
-                    "Produto não encontrado!",
-                    "Erro",
-                    javax.swing.JOptionPane.ERROR_MESSAGE
-            );
-        }
-
-    } else {
-
-        // Exibe aviso caso nenhuma linha tenha sido selecionada.
-        javax.swing.JOptionPane.showMessageDialog(
+    if (linha < 0) {
+        JOptionPane.showMessageDialog(
                 this,
                 "Selecione um produto para editar!",
                 "Aviso",
-                javax.swing.JOptionPane.WARNING_MESSAGE
+                JOptionPane.WARNING_MESSAGE
         );
-      }
+        return;
+    }
+
+    Long id = Long.valueOf(tblProdutos.getValueAt(linha, 0).toString());
+
+    produtoController.findById(id).ifPresentOrElse(
+            produtoEncontrado -> {
+                ProdutoSave tela = new ProdutoSave(produtoEncontrado);
+                tela.setLocationRelativeTo(this);
+                tela.setVisible(true);
+            },
+            () -> JOptionPane.showMessageDialog(
+                    this,
+                    "Produto não encontrado!",
+                    "Erro",
+                    JOptionPane.ERROR_MESSAGE
+            )
+    );
+      
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnFiliaisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFiliaisActionPerformed
@@ -337,21 +324,14 @@ public class ProdutoListar extends javax.swing.JFrame {
     // Carrega todos os produtos cadastrados na tabela.
 private void carregarTabela() {
 
-    // Pega o modelo da tabela.
-    javax.swing.table.DefaultTableModel modelo =
-            (javax.swing.table.DefaultTableModel) tblProdutos.getModel();
+    DefaultTableModel modelo =
+            (DefaultTableModel) tblProdutos.getModel();
 
-    // Limpa as linhas atuais da tabela.
     modelo.setRowCount(0);
 
-    // Busca a lista de produtos usando o controller.
-    java.util.List<br.com.ifba.prg03projeto.mercado.entity.Produto> lista =
-            produtoController.listarTodos(null);
+    List<Produto> lista = produtoController.findAll();
 
-    // Percorre a lista de produtos.
-    for (br.com.ifba.prg03projeto.mercado.entity.Produto produto : lista) {
-
-        // Adiciona cada produto como uma linha na tabela.
+    for (Produto produto : lista) {
         modelo.addRow(new Object[]{
             produto.getId(),
             produto.getNome(),
@@ -365,21 +345,14 @@ private void carregarTabela() {
 // Carrega a tabela filtrando os produtos pelo nome.
 private void carregarTabelaFiltro(String texto) {
 
-    // Pega o modelo da tabela.
-    javax.swing.table.DefaultTableModel modelo =
-            (javax.swing.table.DefaultTableModel) tblProdutos.getModel();
+    DefaultTableModel modelo =
+            (DefaultTableModel) tblProdutos.getModel();
 
-    // Limpa as linhas atuais da tabela.
     modelo.setRowCount(0);
 
-    // Busca os produtos pelo nome digitado.
-    java.util.List<br.com.ifba.prg03projeto.mercado.entity.Produto> lista =
-            produtoController.listarTodos(texto);
+    List<Produto> lista = produtoController.findByNome(texto);
 
-    // Percorre a lista de produtos encontrados.
-    for (br.com.ifba.prg03projeto.mercado.entity.Produto produto : lista) {
-
-        // Adiciona cada produto encontrado na tabela.
+    for (Produto produto : lista) {
         modelo.addRow(new Object[]{
             produto.getId(),
             produto.getNome(),

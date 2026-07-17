@@ -11,4 +11,7 @@ import br.com.ifba.prg03projeto.mercado.entity.EstoqueFilial;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface EstoqueFilialRepository extends JpaRepository<EstoqueFilial, Long> {
+    
+     boolean existsByProdutoId(Long produtoId);
+    
 }

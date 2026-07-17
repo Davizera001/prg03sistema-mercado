@@ -17,7 +17,7 @@ public class SolicitacaoReposicaoView extends javax.swing.JFrame {
     private br.com.ifba.prg03projeto.mercado.controller.FilialController filialController;
 
     // Controller usado para buscar os produtos.
-    private br.com.ifba.prg03projeto.mercado.controller.ProdutoController produtoController;
+    private br.com.ifba.prg03projeto.mercado.produto.controller.ProdutoController produtoController;
 
     // Solicitação selecionada durante uma edição.
     private br.com.ifba.prg03projeto.mercado.entity.SolicitacaoReposicao solicitacaoEdicao;
@@ -26,7 +26,7 @@ public class SolicitacaoReposicaoView extends javax.swing.JFrame {
     private java.util.List<br.com.ifba.prg03projeto.mercado.entity.Filial> listaFiliais;
 
     // Lista auxiliar usada pelo combo de produtos.
-    private java.util.List<br.com.ifba.prg03projeto.mercado.entity.Produto> listaProdutos;
+    private java.util.List<br.com.ifba.prg03projeto.mercado.produto.entity.Produto> listaProdutos;
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(SolicitacaoReposicaoView.class.getName());
 
@@ -104,10 +104,10 @@ public class SolicitacaoReposicaoView extends javax.swing.JFrame {
         }
 
         // Busca todos os produtos.
-        listaProdutos = produtoController.listarTodos(null);
+        listaProdutos = produtoController.findAll();
 
         // Adiciona os nomes dos produtos no combo.
-        for (br.com.ifba.prg03projeto.mercado.entity.Produto produto : listaProdutos) {
+        for (br.com.ifba.prg03projeto.mercado.produto.entity.Produto produto : listaProdutos) {
         cboProduto.addItem(produto.getNome());
         }
     }
@@ -127,7 +127,7 @@ public class SolicitacaoReposicaoView extends javax.swing.JFrame {
 
         produtoController =
             br.com.ifba.prg03projeto.mercado.Prg03sistemaMercadoApplication.contexto
-                    .getBean(br.com.ifba.prg03projeto.mercado.controller.ProdutoController.class);
+                    .getBean(br.com.ifba.prg03projeto.mercado.produto.controller.ProdutoController.class);
 
         // Inicialmente nenhuma solicitação está sendo editada.
         solicitacaoEdicao = null;
@@ -401,7 +401,7 @@ public class SolicitacaoReposicaoView extends javax.swing.JFrame {
                 listaFiliais.get(indiceFilial);
 
         // Obtém o produto selecionado.
-        br.com.ifba.prg03projeto.mercado.entity.Produto produtoSelecionado =
+        br.com.ifba.prg03projeto.mercado.produto.entity.Produto produtoSelecionado =
                 listaProdutos.get(indiceProduto);
 
         // Cria uma solicitação nova ou usa a solicitação em edição.

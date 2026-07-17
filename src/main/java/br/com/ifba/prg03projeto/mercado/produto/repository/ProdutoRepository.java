@@ -2,14 +2,14 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
  */
-package br.com.ifba.prg03projeto.mercado.repository;
+package br.com.ifba.prg03projeto.mercado.produto.repository;
 
 
 // Importa List para retornar uma lista de produtos.
 import java.util.List;
 
 // importando a entidade Produto.
-import br.com.ifba.prg03projeto.mercado.entity.Produto;
+import br.com.ifba.prg03projeto.mercado.produto.entity.Produto;
 
 // Importa a interface JpaRepository,
 // responsável pelas operações de persistência.

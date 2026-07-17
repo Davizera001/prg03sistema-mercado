@@ -17,7 +17,7 @@ public class EstoqueFilialView extends javax.swing.JFrame {
     private br.com.ifba.prg03projeto.mercado.controller.FilialController filialController;
 
     // Controller usado para buscar os produtos.
-    private br.com.ifba.prg03projeto.mercado.controller.ProdutoController produtoController;
+    private br.com.ifba.prg03projeto.mercado.produto.controller.ProdutoController produtoController;
 
     // Guarda o estoque selecionado durante uma edição.
     private br.com.ifba.prg03projeto.mercado.entity.EstoqueFilial estoqueEdicao;
@@ -26,7 +26,7 @@ public class EstoqueFilialView extends javax.swing.JFrame {
     private java.util.List<br.com.ifba.prg03projeto.mercado.entity.Filial> listaFiliais;
 
     // Lista auxiliar que relaciona os itens do combo aos produtos.
-    private java.util.List<br.com.ifba.prg03projeto.mercado.entity.Produto> listaProdutos;
+    private java.util.List<br.com.ifba.prg03projeto.mercado.produto.entity.Produto> listaProdutos;
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(EstoqueFilialView.class.getName());
 
@@ -49,11 +49,11 @@ public class EstoqueFilialView extends javax.swing.JFrame {
         cboFilial.addItem(filial.getNome());
         }
 
-    // Busca todos os produtos.
-    listaProdutos = produtoController.listarTodos(null);
+        // Busca todos os produtos.
+        listaProdutos = produtoController.findAll();
 
     // Adiciona o nome de cada produto no combo.
-        for (br.com.ifba.prg03projeto.mercado.entity.Produto produto : listaProdutos) {
+        for (br.com.ifba.prg03projeto.mercado.produto.entity.Produto produto : listaProdutos) {
         cboProduto.addItem(produto.getNome());
         }
     }
@@ -123,7 +123,7 @@ public class EstoqueFilialView extends javax.swing.JFrame {
 
     produtoController =
             br.com.ifba.prg03projeto.mercado.Prg03sistemaMercadoApplication.contexto
-                    .getBean(br.com.ifba.prg03projeto.mercado.controller.ProdutoController.class);
+                    .getBean(br.com.ifba.prg03projeto.mercado.produto.controller.ProdutoController.class);
 
     // Inicialmente, nenhum estoque está sendo editado.
     estoqueEdicao = null;
@@ -322,7 +322,7 @@ public class EstoqueFilialView extends javax.swing.JFrame {
         br.com.ifba.prg03projeto.mercado.entity.Filial filialSelecionada =
                 listaFiliais.get(indiceFilial);
 
-        br.com.ifba.prg03projeto.mercado.entity.Produto produtoSelecionado =
+        br.com.ifba.prg03projeto.mercado.produto.entity.Produto produtoSelecionado =
                 listaProdutos.get(indiceProduto);
 
         // Cria um novo estoque ou utiliza o estoque em edição.
