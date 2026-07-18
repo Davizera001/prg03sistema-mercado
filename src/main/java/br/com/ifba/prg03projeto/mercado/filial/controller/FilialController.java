@@ -2,13 +2,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package br.com.ifba.prg03projeto.mercado.controller;
+package br.com.ifba.prg03projeto.mercado.filial.controller;
 
 // Importa a entidade Filial.
-import br.com.ifba.prg03projeto.mercado.entity.Filial;
+import br.com.ifba.prg03projeto.mercado.filial.entity.Filial;
 
 // Importa o serviço responsável pelas regras de Filial.
-import br.com.ifba.prg03projeto.mercado.service.FilialService;
+import br.com.ifba.prg03projeto.mercado.filial.service.FilialService;
 
 // Importa as coleções utilizadas.
 import java.util.List;

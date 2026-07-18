@@ -14,7 +14,7 @@ public class SolicitacaoReposicaoView extends javax.swing.JFrame {
     private br.com.ifba.prg03projeto.mercado.controller.SolicitacaoReposicaoController solicitacaoController;
 
     // Controller usado para buscar as filiais.
-    private br.com.ifba.prg03projeto.mercado.controller.FilialController filialController;
+    private br.com.ifba.prg03projeto.mercado.filial.controller.FilialController filialController;
 
     // Controller usado para buscar os produtos.
     private br.com.ifba.prg03projeto.mercado.produto.controller.ProdutoController produtoController;
@@ -23,7 +23,7 @@ public class SolicitacaoReposicaoView extends javax.swing.JFrame {
     private br.com.ifba.prg03projeto.mercado.entity.SolicitacaoReposicao solicitacaoEdicao;
 
     // Lista auxiliar usada pelo combo de filiais.
-    private java.util.List<br.com.ifba.prg03projeto.mercado.entity.Filial> listaFiliais;
+    private java.util.List<br.com.ifba.prg03projeto.mercado.filial.entity.Filial> listaFiliais;
 
     // Lista auxiliar usada pelo combo de produtos.
     private java.util.List<br.com.ifba.prg03projeto.mercado.produto.entity.Produto> listaProdutos;
@@ -99,7 +99,7 @@ public class SolicitacaoReposicaoView extends javax.swing.JFrame {
         listaFiliais = filialController.listarTodos();
 
         // Adiciona os nomes das filiais no combo.
-        for (br.com.ifba.prg03projeto.mercado.entity.Filial filial : listaFiliais) {
+        for (br.com.ifba.prg03projeto.mercado.filial.entity.Filial filial : listaFiliais) {
         cboFilial.addItem(filial.getNome());
         }
 
@@ -123,7 +123,7 @@ public class SolicitacaoReposicaoView extends javax.swing.JFrame {
 
         filialController =
             br.com.ifba.prg03projeto.mercado.Prg03sistemaMercadoApplication.contexto
-                    .getBean(br.com.ifba.prg03projeto.mercado.controller.FilialController.class);
+                    .getBean(br.com.ifba.prg03projeto.mercado.filial.controller.FilialController.class);
 
         produtoController =
             br.com.ifba.prg03projeto.mercado.Prg03sistemaMercadoApplication.contexto
@@ -397,7 +397,7 @@ public class SolicitacaoReposicaoView extends javax.swing.JFrame {
         int indiceProduto = cboProduto.getSelectedIndex();
 
         // Obtém a filial selecionada.
-        br.com.ifba.prg03projeto.mercado.entity.Filial filialSelecionada =
+        br.com.ifba.prg03projeto.mercado.filial.entity.Filial filialSelecionada =
                 listaFiliais.get(indiceFilial);
 
         // Obtém o produto selecionado.

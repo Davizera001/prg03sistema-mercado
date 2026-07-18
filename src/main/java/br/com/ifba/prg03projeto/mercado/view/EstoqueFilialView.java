@@ -14,7 +14,7 @@ public class EstoqueFilialView extends javax.swing.JFrame {
     private br.com.ifba.prg03projeto.mercado.controller.EstoqueFilialController estoqueFilialController;
 
     // Controller usado para buscar as filiais.
-    private br.com.ifba.prg03projeto.mercado.controller.FilialController filialController;
+    private br.com.ifba.prg03projeto.mercado.filial.controller.FilialController filialController;
 
     // Controller usado para buscar os produtos.
     private br.com.ifba.prg03projeto.mercado.produto.controller.ProdutoController produtoController;
@@ -23,7 +23,7 @@ public class EstoqueFilialView extends javax.swing.JFrame {
     private br.com.ifba.prg03projeto.mercado.entity.EstoqueFilial estoqueEdicao;
 
     // Lista auxiliar que relaciona os itens do combo às filiais.
-    private java.util.List<br.com.ifba.prg03projeto.mercado.entity.Filial> listaFiliais;
+    private java.util.List<br.com.ifba.prg03projeto.mercado.filial.entity.Filial> listaFiliais;
 
     // Lista auxiliar que relaciona os itens do combo aos produtos.
     private java.util.List<br.com.ifba.prg03projeto.mercado.produto.entity.Produto> listaProdutos;
@@ -45,7 +45,7 @@ public class EstoqueFilialView extends javax.swing.JFrame {
     listaFiliais = filialController.listarTodos();
 
     // Adiciona o nome de cada filial no combo.
-        for (br.com.ifba.prg03projeto.mercado.entity.Filial filial : listaFiliais) {
+        for (br.com.ifba.prg03projeto.mercado.filial.entity.Filial filial : listaFiliais) {
         cboFilial.addItem(filial.getNome());
         }
 
@@ -119,7 +119,7 @@ public class EstoqueFilialView extends javax.swing.JFrame {
 
     filialController =
             br.com.ifba.prg03projeto.mercado.Prg03sistemaMercadoApplication.contexto
-                    .getBean(br.com.ifba.prg03projeto.mercado.controller.FilialController.class);
+                    .getBean(br.com.ifba.prg03projeto.mercado.filial.controller.FilialController.class);
 
     produtoController =
             br.com.ifba.prg03projeto.mercado.Prg03sistemaMercadoApplication.contexto
@@ -319,7 +319,7 @@ public class EstoqueFilialView extends javax.swing.JFrame {
         int indiceProduto = cboProduto.getSelectedIndex();
 
         // Obtém os objetos relacionados aos índices selecionados.
-        br.com.ifba.prg03projeto.mercado.entity.Filial filialSelecionada =
+        br.com.ifba.prg03projeto.mercado.filial.entity.Filial filialSelecionada =
                 listaFiliais.get(indiceFilial);
 
         br.com.ifba.prg03projeto.mercado.produto.entity.Produto produtoSelecionado =

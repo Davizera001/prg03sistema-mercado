@@ -8,7 +8,7 @@ import br.com.ifba.prg03projeto.mercado.Prg03sistemaMercadoApplication;
 import br.com.ifba.prg03projeto.mercado.produto.controller.ProdutoController;
 import br.com.ifba.prg03projeto.mercado.produto.entity.Produto;
 import br.com.ifba.prg03projeto.mercado.view.EstoqueFilialView;
-import br.com.ifba.prg03projeto.mercado.view.FilialView;
+import br.com.ifba.prg03projeto.mercado.filial.view.FilialView;
 import br.com.ifba.prg03projeto.mercado.view.SolicitacaoReposicaoView;
 import java.util.List;
 import javax.swing.JOptionPane;

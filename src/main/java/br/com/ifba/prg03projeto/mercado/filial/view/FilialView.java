@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package br.com.ifba.prg03projeto.mercado.view;
+package br.com.ifba.prg03projeto.mercado.filial.view;
 
 /**
  *
@@ -11,10 +11,10 @@ package br.com.ifba.prg03projeto.mercado.view;
 public class FilialView extends javax.swing.JFrame {
     
     // Controller usado para acessar as operações de Filial.
-private br.com.ifba.prg03projeto.mercado.controller.FilialController filialController;
+private br.com.ifba.prg03projeto.mercado.filial.controller.FilialController filialController;
 
     // Guarda a filial selecionada quando a tela estiver no modo de edição.
-private br.com.ifba.prg03projeto.mercado.entity.Filial filialEdicao;
+private br.com.ifba.prg03projeto.mercado.filial.entity.Filial filialEdicao;
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FilialView.class.getName());
 
@@ -33,11 +33,11 @@ private br.com.ifba.prg03projeto.mercado.entity.Filial filialEdicao;
     modelo.setRowCount(0);
 
     // Busca todas as filiais usando o controller.
-    java.util.List<br.com.ifba.prg03projeto.mercado.entity.Filial> lista =
+    java.util.List<br.com.ifba.prg03projeto.mercado.filial.entity.Filial> lista =
             filialController.listarTodos();
 
     // Percorre as filiais encontradas.
-    for (br.com.ifba.prg03projeto.mercado.entity.Filial filial : lista) {
+    for (br.com.ifba.prg03projeto.mercado.filial.entity.Filial filial : lista) {
 
         // Adiciona cada filial como uma linha da tabela.
         modelo.addRow(new Object[]{
@@ -68,7 +68,7 @@ private br.com.ifba.prg03projeto.mercado.entity.Filial filialEdicao;
 
     // Busca o FilialController dentro do contexto do Spring.
     filialController = br.com.ifba.prg03projeto.mercado.Prg03sistemaMercadoApplication.contexto
-            .getBean(br.com.ifba.prg03projeto.mercado.controller.FilialController.class);
+            .getBean(br.com.ifba.prg03projeto.mercado.filial.controller.FilialController.class);
 
     // Inicialmente a tela não está editando nenhuma filial.
     filialEdicao = null;
@@ -254,10 +254,10 @@ private br.com.ifba.prg03projeto.mercado.entity.Filial filialEdicao;
         }
 
         // Cria uma nova filial ou usa a filial em edição.
-        br.com.ifba.prg03projeto.mercado.entity.Filial filial;
+        br.com.ifba.prg03projeto.mercado.filial.entity.Filial filial;
 
         if (filialEdicao == null) {
-            filial = new br.com.ifba.prg03projeto.mercado.entity.Filial();
+            filial = new br.com.ifba.prg03projeto.mercado.filial.entity.Filial();
         } else {
             filial = filialEdicao;
         }
@@ -323,11 +323,11 @@ private br.com.ifba.prg03projeto.mercado.entity.Filial filialEdicao;
         );
 
         // Busca a filial no banco.
-        org.springframework.http.ResponseEntity<br.com.ifba.prg03projeto.mercado.entity.Filial> resposta =
+        org.springframework.http.ResponseEntity<br.com.ifba.prg03projeto.mercado.filial.entity.Filial> resposta =
                 filialController.buscarPorId(id);
 
         // Obtém a filial da resposta.
-        br.com.ifba.prg03projeto.mercado.entity.Filial filial =
+        br.com.ifba.prg03projeto.mercado.filial.entity.Filial filial =
                 resposta.getBody();
 
         // Verifica se a filial foi encontrada.
