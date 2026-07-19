@@ -14,4 +14,5 @@ public interface SolicitacaoReposicaoRepository
         extends JpaRepository<SolicitacaoReposicao, Long> {
     
     boolean existsByProdutoId(Long produtoId);
+    boolean existsByFilialId(Long filialId);
 }

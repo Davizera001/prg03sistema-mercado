@@ -34,7 +34,7 @@ private br.com.ifba.prg03projeto.mercado.filial.entity.Filial filialEdicao;
 
     // Busca todas as filiais usando o controller.
     java.util.List<br.com.ifba.prg03projeto.mercado.filial.entity.Filial> lista =
-            filialController.listarTodos();
+                filialController.findAll();
 
     // Percorre as filiais encontradas.
     for (br.com.ifba.prg03projeto.mercado.filial.entity.Filial filial : lista) {
@@ -267,7 +267,11 @@ private br.com.ifba.prg03projeto.mercado.filial.entity.Filial filialEdicao;
         filial.setEndereco(txtEndereco.getText());
 
         // Salva a filial.
-        filialController.salvar(filial);
+        if (filialEdicao == null) {
+            filialController.save(filial);
+        } else {
+            filialController.update(filialEdicao.getId(), filial);
+          };
 
         // Atualiza a tabela.
         carregarTabela();
@@ -311,49 +315,34 @@ private br.com.ifba.prg03projeto.mercado.filial.entity.Filial filialEdicao;
     }//GEN-LAST:event_btnAtualizarActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-    // Obtém a linha selecionada.
-    int linha = tblFiliais.getSelectedRow();
+    
+         int linha = tblFiliais.getSelectedRow();
 
-    // Verifica se uma filial foi selecionada.
-    if (linha >= 0) {
+        if (linha >= 0) {
 
-        // Obtém o ID da filial selecionada.
         Long id = Long.parseLong(
                 tblFiliais.getValueAt(linha, 0).toString()
         );
 
-        // Busca a filial no banco.
-        org.springframework.http.ResponseEntity<br.com.ifba.prg03projeto.mercado.filial.entity.Filial> resposta =
-                filialController.buscarPorId(id);
+        filialController.findById(id)
+                .ifPresentOrElse(
+                        filial -> {
+                            filialEdicao = filial;
 
-        // Obtém a filial da resposta.
-        br.com.ifba.prg03projeto.mercado.filial.entity.Filial filial =
-                resposta.getBody();
+                            txtNome.setText(filial.getNome());
+                            txtEndereco.setText(filial.getEndereco());
 
-        // Verifica se a filial foi encontrada.
-        if (filial != null) {
-
-            // Guarda a filial para edição.
-            filialEdicao = filial;
-
-            // Preenche os campos.
-            txtNome.setText(filial.getNome());
-            txtEndereco.setText(filial.getEndereco());
-
-            // Coloca o cursor no campo nome.
-            txtNome.requestFocus();
+                            txtNome.requestFocus();
+                        },
+                        () -> javax.swing.JOptionPane.showMessageDialog(
+                                this,
+                                "Filial não encontrada!",
+                                "Erro",
+                                javax.swing.JOptionPane.ERROR_MESSAGE
+                        )
+                );
 
         } else {
-
-            javax.swing.JOptionPane.showMessageDialog(
-                    this,
-                    "Filial não encontrada!",
-                    "Erro",
-                    javax.swing.JOptionPane.ERROR_MESSAGE
-            );
-        }
-
-    } else {
 
         javax.swing.JOptionPane.showMessageDialog(
                 this,
@@ -361,8 +350,7 @@ private br.com.ifba.prg03projeto.mercado.filial.entity.Filial filialEdicao;
                 "Aviso",
                 javax.swing.JOptionPane.WARNING_MESSAGE
         );
-    }
-    
+          }
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnRemoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoverActionPerformed
@@ -375,10 +363,13 @@ private br.com.ifba.prg03projeto.mercado.filial.entity.Filial filialEdicao;
 
         // Solicita confirmação.
         int confirmacao = javax.swing.JOptionPane.showConfirmDialog(
-                this,
-                "Tem certeza que deseja remover esta filial?",
-                "Confirmação",
-                javax.swing.JOptionPane.YES_NO_OPTION
+        this,
+        "Ao remover esta filial, os estoques vinculados a ela "
+        + "também serão apagados.\n\n"
+        + "Deseja continuar?",
+        "Confirmar exclusão da filial",
+        javax.swing.JOptionPane.YES_NO_OPTION,
+        javax.swing.JOptionPane.WARNING_MESSAGE
         );
 
         // Verifica a confirmação.
@@ -392,7 +383,7 @@ private br.com.ifba.prg03projeto.mercado.filial.entity.Filial filialEdicao;
             try {
 
                 // Remove a filial.
-                filialController.deletar(id);
+                filialController.delete(id);
 
                 // Atualiza a tabela.
                 carregarTabela();

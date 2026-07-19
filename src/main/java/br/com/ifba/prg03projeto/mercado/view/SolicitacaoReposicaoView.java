@@ -96,8 +96,8 @@ public class SolicitacaoReposicaoView extends javax.swing.JFrame {
         cboProduto.removeAllItems();
 
         // Busca todas as filiais.
-        listaFiliais = filialController.listarTodos();
-
+        listaFiliais = filialController.findAll();
+        
         // Adiciona os nomes das filiais no combo.
         for (br.com.ifba.prg03projeto.mercado.filial.entity.Filial filial : listaFiliais) {
         cboFilial.addItem(filial.getNome());

@@ -42,7 +42,7 @@ public class EstoqueFilialView extends javax.swing.JFrame {
     cboProduto.removeAllItems();
 
     // Busca todas as filiais.
-    listaFiliais = filialController.listarTodos();
+    listaFiliais = filialController.findAll();
 
     // Adiciona o nome de cada filial no combo.
         for (br.com.ifba.prg03projeto.mercado.filial.entity.Filial filial : listaFiliais) {
