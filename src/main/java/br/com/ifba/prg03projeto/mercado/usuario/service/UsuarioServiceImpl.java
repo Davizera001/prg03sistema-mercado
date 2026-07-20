@@ -92,6 +92,40 @@ public class UsuarioServiceImpl
 
         usuarioRepository.deleteById(id);
     }
+    
+    @Override
+    public Usuario autenticar(
+        String login,
+        String senha) {
+
+    if (login == null || login.isBlank()) {
+        throw new RuntimeException(
+                "Informe o login."
+        );
+    }
+
+    if (senha == null || senha.isBlank()) {
+        throw new RuntimeException(
+                "Informe a senha."
+        );
+    }
+
+    Usuario usuario =
+            usuarioRepository.findByLogin(login.trim())
+                    .orElseThrow(() ->
+                            new RuntimeException(
+                                    "Login ou senha inválidos."
+                            )
+                    );
+
+    if (!usuario.getSenha().equals(senha)) {
+        throw new RuntimeException(
+                "Login ou senha inválidos."
+        );
+    }
+
+    return usuario;
+        }
 
     private void validate(
             Usuario usuario) {

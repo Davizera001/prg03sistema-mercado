@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package br.com.ifba.prg03projeto.mercado.dashboard.view;
+import br.com.ifba.prg03projeto.mercado.venda.view.VendaView;
 
 /**
  *
@@ -198,10 +199,9 @@ public class DashboardView extends javax.swing.JFrame {
 
     private void btnVendasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVendasActionPerformed
     
-        javax.swing.JOptionPane.showMessageDialog(
-            this,
-            "Módulo em desenvolvimento."
-    );
+        VendaView tela = new VendaView();
+        tela.setLocationRelativeTo(this);
+        tela.setVisible(true);
     }//GEN-LAST:event_btnVendasActionPerformed
 
     private void btnItensVendaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnItensVendaActionPerformed

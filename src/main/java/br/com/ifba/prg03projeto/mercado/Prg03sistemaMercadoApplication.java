@@ -1,6 +1,6 @@
 package br.com.ifba.prg03projeto.mercado;
 
-import br.com.ifba.prg03projeto.mercado.dashboard.view.DashboardView;
+import br.com.ifba.prg03projeto.mercado.login.view.LoginView;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -23,12 +23,10 @@ public class Prg03sistemaMercadoApplication {
         // Abre a tela principal somente depois que o Spring estiver iniciado.
         java.awt.EventQueue.invokeLater(() -> {
 
-            DashboardView dashboardView = new DashboardView();
+            LoginView loginView = new LoginView();
 
-            // Centraliza a janela na tela.
-            dashboardView.setLocationRelativeTo(null);
-
-            dashboardView.setVisible(true);
+            loginView.setLocationRelativeTo(null);
+            loginView.setVisible(true);
         });
     }
 }
