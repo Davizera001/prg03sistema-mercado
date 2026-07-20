@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package br.com.ifba.prg03projeto.mercado.view;
+package br.com.ifba.prg03projeto.mercado.solicitacaoreposicao.view;
 
 /**
  *
@@ -11,7 +11,7 @@ package br.com.ifba.prg03projeto.mercado.view;
 public class SolicitacaoReposicaoView extends javax.swing.JFrame {
     
     // Controller usado para acessar as solicitações de reposição.
-    private br.com.ifba.prg03projeto.mercado.controller.SolicitacaoReposicaoController solicitacaoController;
+    private br.com.ifba.prg03projeto.mercado.solicitacaoreposicao.controller.SolicitacaoReposicaoController solicitacaoController;
 
     // Controller usado para buscar as filiais.
     private br.com.ifba.prg03projeto.mercado.filial.controller.FilialController filialController;
@@ -20,7 +20,7 @@ public class SolicitacaoReposicaoView extends javax.swing.JFrame {
     private br.com.ifba.prg03projeto.mercado.produto.controller.ProdutoController produtoController;
 
     // Solicitação selecionada durante uma edição.
-    private br.com.ifba.prg03projeto.mercado.entity.SolicitacaoReposicao solicitacaoEdicao;
+    private br.com.ifba.prg03projeto.mercado.solicitacaoreposicao.entity.SolicitacaoReposicao solicitacaoEdicao;
 
     // Lista auxiliar usada pelo combo de filiais.
     private java.util.List<br.com.ifba.prg03projeto.mercado.filial.entity.Filial> listaFiliais;
@@ -70,11 +70,11 @@ public class SolicitacaoReposicaoView extends javax.swing.JFrame {
         modelo.setRowCount(0);
 
         // Busca todas as solicitações.
-        java.util.List<br.com.ifba.prg03projeto.mercado.entity.SolicitacaoReposicao> lista =
-            solicitacaoController.listarTodos();
+        java.util.List<br.com.ifba.prg03projeto.mercado.solicitacaoreposicao.entity.SolicitacaoReposicao> lista =
+            solicitacaoController.findAll();
 
         // Percorre as solicitações encontradas.
-        for (br.com.ifba.prg03projeto.mercado.entity.SolicitacaoReposicao solicitacao : lista) {
+        for (br.com.ifba.prg03projeto.mercado.solicitacaoreposicao.entity.SolicitacaoReposicao solicitacao : lista) {
 
             // Adiciona cada solicitação como uma linha da tabela.
             modelo.addRow(new Object[]{
@@ -119,7 +119,7 @@ public class SolicitacaoReposicaoView extends javax.swing.JFrame {
         // Busca os controllers dentro do contexto do Spring.
         solicitacaoController =
             br.com.ifba.prg03projeto.mercado.Prg03sistemaMercadoApplication.contexto
-                    .getBean(br.com.ifba.prg03projeto.mercado.controller.SolicitacaoReposicaoController.class);
+                    .getBean(br.com.ifba.prg03projeto.mercado.solicitacaoreposicao.controller.SolicitacaoReposicaoController.class);
 
         filialController =
             br.com.ifba.prg03projeto.mercado.Prg03sistemaMercadoApplication.contexto
@@ -293,13 +293,10 @@ public class SolicitacaoReposicaoView extends javax.swing.JFrame {
 
     private void btnRemoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoverActionPerformed
         
-    // Obtém a linha selecionada.
-    int linha = tblSolicitacoes.getSelectedRow();
+        int linha = tblSolicitacoes.getSelectedRow();
 
-    // Verifica se alguma solicitação foi selecionada.
     if (linha >= 0) {
 
-        // Solicita a confirmação do usuário.
         int confirmacao = javax.swing.JOptionPane.showConfirmDialog(
                 this,
                 "Tem certeza que deseja remover esta solicitação?",
@@ -307,23 +304,17 @@ public class SolicitacaoReposicaoView extends javax.swing.JFrame {
                 javax.swing.JOptionPane.YES_NO_OPTION
         );
 
-        // Verifica se a remoção foi confirmada.
         if (confirmacao == javax.swing.JOptionPane.YES_OPTION) {
 
-            // Obtém o ID da solicitação selecionada.
             Long id = Long.parseLong(
                     tblSolicitacoes.getValueAt(linha, 0).toString()
             );
 
             try {
 
-                // Remove a solicitação.
-                solicitacaoController.deletar(id);
+                solicitacaoController.delete(id);
 
-                // Atualiza a tabela.
                 carregarTabela();
-
-                // Limpa o formulário.
                 limparCampos();
 
                 javax.swing.JOptionPane.showMessageDialog(
@@ -358,88 +349,70 @@ public class SolicitacaoReposicaoView extends javax.swing.JFrame {
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
     
-        try {
+         try {
 
-        // Verifica se existem filiais cadastradas.
         if (listaFiliais == null || listaFiliais.isEmpty()) {
             throw new RuntimeException(
                     "Cadastre pelo menos uma filial antes de criar uma solicitação."
             );
         }
 
-        // Verifica se existem produtos cadastrados.
         if (listaProdutos == null || listaProdutos.isEmpty()) {
             throw new RuntimeException(
                     "Cadastre pelo menos um produto antes de criar uma solicitação."
             );
         }
 
-        // Verifica se a quantidade foi preenchida.
         if (txtQuantidadeSolicitada.getText().isBlank()) {
             throw new RuntimeException(
                     "A quantidade solicitada é obrigatória."
             );
         }
 
-        // Converte a quantidade digitada para inteiro.
         Integer quantidade =
                 Integer.parseInt(txtQuantidadeSolicitada.getText().trim());
 
-        // Impede valores iguais ou menores que zero.
         if (quantidade <= 0) {
             throw new RuntimeException(
                     "A quantidade solicitada deve ser maior que zero."
             );
         }
 
-        // Obtém os índices selecionados.
         int indiceFilial = cboFilial.getSelectedIndex();
         int indiceProduto = cboProduto.getSelectedIndex();
 
-        // Obtém a filial selecionada.
         br.com.ifba.prg03projeto.mercado.filial.entity.Filial filialSelecionada =
                 listaFiliais.get(indiceFilial);
 
-        // Obtém o produto selecionado.
         br.com.ifba.prg03projeto.mercado.produto.entity.Produto produtoSelecionado =
                 listaProdutos.get(indiceProduto);
 
-        // Cria uma solicitação nova ou usa a solicitação em edição.
-        br.com.ifba.prg03projeto.mercado.entity.SolicitacaoReposicao solicitacao;
+        br.com.ifba.prg03projeto.mercado.solicitacaoreposicao.entity.SolicitacaoReposicao solicitacao;
 
         if (solicitacaoEdicao == null) {
-
-            // Cria uma nova solicitação.
             solicitacao =
-                    new br.com.ifba.prg03projeto.mercado.entity.SolicitacaoReposicao();
-
-            // Define a data e o horário somente no cadastro.
-            solicitacao.setDataSolicitacao(
-                    java.time.LocalDateTime.now()
-            );
-
+                    new br.com.ifba.prg03projeto.mercado.solicitacaoreposicao.entity.SolicitacaoReposicao();
         } else {
-
-            // Usa a solicitação existente durante a edição.
             solicitacao = solicitacaoEdicao;
         }
 
-        // Preenche os dados da solicitação.
         solicitacao.setFilial(filialSelecionada);
         solicitacao.setProduto(produtoSelecionado);
         solicitacao.setQuantidadeSolicitada(quantidade);
         solicitacao.setStatus(cboStatus.getSelectedItem().toString());
 
-        // Salva a solicitação.
-        solicitacaoController.salvar(solicitacao);
+        if (solicitacaoEdicao == null) {
+            solicitacaoController.save(solicitacao);
+        } else {
+            solicitacaoController.update(
+                    solicitacaoEdicao.getId(),
+                    solicitacao
+            );
+        }
 
-        // Atualiza a tabela.
         carregarTabela();
-
-        // Limpa os campos.
         limparCampos();
 
-        // Exibe mensagem de sucesso.
         javax.swing.JOptionPane.showMessageDialog(
                 this,
                 "Solicitação salva com sucesso!",
@@ -449,7 +422,6 @@ public class SolicitacaoReposicaoView extends javax.swing.JFrame {
 
     } catch (NumberFormatException e) {
 
-        // Exibe erro caso a quantidade não seja um número inteiro.
         javax.swing.JOptionPane.showMessageDialog(
                 this,
                 "A quantidade deve ser um número inteiro válido!",
@@ -459,7 +431,6 @@ public class SolicitacaoReposicaoView extends javax.swing.JFrame {
 
     } catch (Exception e) {
 
-        // Exibe qualquer outro erro.
         javax.swing.JOptionPane.showMessageDialog(
                 this,
                 "Erro ao salvar solicitação: " + e.getMessage(),
@@ -487,42 +458,29 @@ public class SolicitacaoReposicaoView extends javax.swing.JFrame {
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
     
-        // Obtém a linha selecionada na tabela.
-    int linha = tblSolicitacoes.getSelectedRow();
+          int linha = tblSolicitacoes.getSelectedRow();
 
-    // Verifica se alguma solicitação foi selecionada.
     if (linha >= 0) {
 
-        // Obtém o ID da solicitação.
         Long id = Long.parseLong(
                 tblSolicitacoes.getValueAt(linha, 0).toString()
         );
 
-        // Busca a solicitação completa pelo ID.
-        org.springframework.http.ResponseEntity<br.com.ifba.prg03projeto.mercado.entity.SolicitacaoReposicao> resposta =
-                solicitacaoController.buscarPorId(id);
+        br.com.ifba.prg03projeto.mercado.solicitacaoreposicao.entity.SolicitacaoReposicao solicitacao =
+                solicitacaoController.findById(id).orElse(null);
 
-        // Pega a solicitação retornada.
-        br.com.ifba.prg03projeto.mercado.entity.SolicitacaoReposicao solicitacao =
-                resposta.getBody();
-
-        // Verifica se foi encontrada.
         if (solicitacao != null) {
 
-            // Guarda a solicitação em edição.
             solicitacaoEdicao = solicitacao;
 
-            // Preenche a quantidade.
             txtQuantidadeSolicitada.setText(
                     String.valueOf(solicitacao.getQuantidadeSolicitada())
             );
 
-            // Seleciona o status.
             cboStatus.setSelectedItem(
                     solicitacao.getStatus()
             );
 
-            // Seleciona a filial correspondente.
             for (int i = 0; i < listaFiliais.size(); i++) {
 
                 if (listaFiliais.get(i).getId()
@@ -533,7 +491,6 @@ public class SolicitacaoReposicaoView extends javax.swing.JFrame {
                 }
             }
 
-            // Seleciona o produto correspondente.
             for (int i = 0; i < listaProdutos.size(); i++) {
 
                 if (listaProdutos.get(i).getId()
@@ -544,7 +501,6 @@ public class SolicitacaoReposicaoView extends javax.swing.JFrame {
                 }
             }
 
-            // Coloca o cursor no campo quantidade.
             txtQuantidadeSolicitada.requestFocus();
 
         } else {
@@ -565,7 +521,7 @@ public class SolicitacaoReposicaoView extends javax.swing.JFrame {
                 "Aviso",
                 javax.swing.JOptionPane.WARNING_MESSAGE
         );
-      }
+    }
         
         
     }//GEN-LAST:event_btnEditarActionPerformed

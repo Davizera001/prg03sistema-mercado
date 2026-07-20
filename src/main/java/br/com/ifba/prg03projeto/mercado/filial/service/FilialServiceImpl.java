@@ -2,7 +2,7 @@ package br.com.ifba.prg03projeto.mercado.filial.service;
 
 import br.com.ifba.prg03projeto.mercado.filial.entity.Filial;
 import br.com.ifba.prg03projeto.mercado.filial.repository.FilialRepository;
-import br.com.ifba.prg03projeto.mercado.repository.SolicitacaoReposicaoRepository;
+import br.com.ifba.prg03projeto.mercado.solicitacaoreposicao.repository.SolicitacaoReposicaoRepository;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Service;

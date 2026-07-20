@@ -1,10 +1,5 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-package br.com.ifba.prg03projeto.mercado.entity;
+package br.com.ifba.prg03projeto.mercado.solicitacaoreposicao.entity;
 
-// Importa as anotações de persistência do JPA.
 import br.com.ifba.prg03projeto.mercado.filial.entity.Filial;
 import br.com.ifba.prg03projeto.mercado.produto.entity.Produto;
 import jakarta.persistence.Entity;
@@ -13,35 +8,25 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-
-// Importa a classe usada para armazenar data e horário.
 import java.time.LocalDateTime;
-
-// Importa as anotações do Lombok.
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class SolicitacaoReposicao {
 
-    // Identificador único da solicitação.
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Data e horário em que a solicitação foi realizada.
     private LocalDateTime dataSolicitacao;
 
-    // Situação atual da solicitação.
     private String status;
 
-    // Quantidade solicitada para reposição.
     private Integer quantidadeSolicitada;
 
     /*

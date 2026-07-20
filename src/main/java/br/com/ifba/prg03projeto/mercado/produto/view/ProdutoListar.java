@@ -9,7 +9,7 @@ import br.com.ifba.prg03projeto.mercado.produto.controller.ProdutoController;
 import br.com.ifba.prg03projeto.mercado.produto.entity.Produto;
 import br.com.ifba.prg03projeto.mercado.estoquefilial.view.EstoqueFilialView;
 import br.com.ifba.prg03projeto.mercado.filial.view.FilialView;
-import br.com.ifba.prg03projeto.mercado.view.SolicitacaoReposicaoView;
+import br.com.ifba.prg03projeto.mercado.solicitacaoreposicao.view.SolicitacaoReposicaoView;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
