@@ -1,6 +1,6 @@
 package br.com.ifba.prg03projeto.mercado.produto.service;
 
-import br.com.ifba.prg03projeto.mercado.repository.EstoqueFilialRepository;
+import br.com.ifba.prg03projeto.mercado.estoquefilial.repository.EstoqueFilialRepository;
 import br.com.ifba.prg03projeto.mercado.repository.SolicitacaoReposicaoRepository;
 import br.com.ifba.prg03projeto.mercado.produto.entity.Produto;
 import br.com.ifba.prg03projeto.mercado.produto.repository.ProdutoRepository;

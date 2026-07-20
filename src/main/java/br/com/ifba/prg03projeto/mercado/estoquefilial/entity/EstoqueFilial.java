@@ -2,35 +2,27 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package br.com.ifba.prg03projeto.mercado.entity;
+package br.com.ifba.prg03projeto.mercado.estoquefilial.entity;
 
-// Importa as anotações de persistência do JPA.
 import br.com.ifba.prg03projeto.mercado.filial.entity.Filial;
 import br.com.ifba.prg03projeto.mercado.produto.entity.Produto;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-
-// Importa a anotação que impede a repetição infinita no JSON.
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
-// Importa as anotações do Lombok.
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class EstoqueFilial {
 
-    // Identificador único do registro de estoque.
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -39,10 +31,10 @@ public class EstoqueFilial {
     private Integer quantidade;
 
     /*
-     * Muitos registros de estoque podem pertencer à mesma filial.
+     * Muitos registros de estoque pertencem a uma filial.
      *
-     * Não colocamos cascade aqui porque a filial possui
-     * existência própria.
+     * Não utilizamos cascade porque a filial possui
+     * ciclo de vida próprio.
      */
     @ManyToOne
     @JoinColumn(name = "filial_id", nullable = false)
@@ -50,10 +42,11 @@ public class EstoqueFilial {
     private Filial filial;
 
     /*
-     * Muitos registros de estoque podem apontar para o mesmo produto.
+     * Muitos registros de estoque podem referenciar
+     * o mesmo produto.
      *
-     * Não usamos CascadeType.REMOVE ou CascadeType.ALL,
-     * pois excluir um estoque não deve excluir o produto.
+     * O produto também possui existência própria,
+     * portanto não utilizamos CascadeType.ALL.
      */
     @ManyToOne
     @JoinColumn(name = "produto_id", nullable = false)

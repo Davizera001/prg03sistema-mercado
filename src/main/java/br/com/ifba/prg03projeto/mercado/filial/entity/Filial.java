@@ -5,7 +5,7 @@
 package br.com.ifba.prg03projeto.mercado.filial.entity;
 
 // Importa as anotações de persistência do JPA.
-import br.com.ifba.prg03projeto.mercado.entity.EstoqueFilial;
+import br.com.ifba.prg03projeto.mercado.estoquefilial.entity.EstoqueFilial;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

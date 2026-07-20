@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package br.com.ifba.prg03projeto.mercado.view;
+package br.com.ifba.prg03projeto.mercado.estoquefilial.view;
 
 /**
  *
@@ -11,7 +11,7 @@ package br.com.ifba.prg03projeto.mercado.view;
 public class EstoqueFilialView extends javax.swing.JFrame {
     
     // Controller usado para acessar as operações de estoque.
-    private br.com.ifba.prg03projeto.mercado.controller.EstoqueFilialController estoqueFilialController;
+    private br.com.ifba.prg03projeto.mercado.estoquefilial.controller.EstoqueFilialController estoqueFilialController;
 
     // Controller usado para buscar as filiais.
     private br.com.ifba.prg03projeto.mercado.filial.controller.FilialController filialController;
@@ -20,7 +20,7 @@ public class EstoqueFilialView extends javax.swing.JFrame {
     private br.com.ifba.prg03projeto.mercado.produto.controller.ProdutoController produtoController;
 
     // Guarda o estoque selecionado durante uma edição.
-    private br.com.ifba.prg03projeto.mercado.entity.EstoqueFilial estoqueEdicao;
+    private br.com.ifba.prg03projeto.mercado.estoquefilial.entity.EstoqueFilial estoqueEdicao;
 
     // Lista auxiliar que relaciona os itens do combo às filiais.
     private java.util.List<br.com.ifba.prg03projeto.mercado.filial.entity.Filial> listaFiliais;
@@ -69,11 +69,11 @@ public class EstoqueFilialView extends javax.swing.JFrame {
     modelo.setRowCount(0);
 
     // Busca os estoques cadastrados.
-    java.util.List<br.com.ifba.prg03projeto.mercado.entity.EstoqueFilial> lista =
-            estoqueFilialController.listarTodos();
+    java.util.List<br.com.ifba.prg03projeto.mercado.estoquefilial.entity.EstoqueFilial> lista =
+            estoqueFilialController.findAll();
 
         // Adiciona os registros na tabela.
-        for (br.com.ifba.prg03projeto.mercado.entity.EstoqueFilial estoque : lista) {
+        for (br.com.ifba.prg03projeto.mercado.estoquefilial.entity.EstoqueFilial estoque : lista) {
 
             modelo.addRow(new Object[]{
             estoque.getId(),
@@ -115,7 +115,7 @@ public class EstoqueFilialView extends javax.swing.JFrame {
     // Busca os controllers dentro do contexto do Spring.
     estoqueFilialController =
             br.com.ifba.prg03projeto.mercado.Prg03sistemaMercadoApplication.contexto
-                    .getBean(br.com.ifba.prg03projeto.mercado.controller.EstoqueFilialController.class);
+                    .getBean(br.com.ifba.prg03projeto.mercado.estoquefilial.controller.EstoqueFilialController.class);
 
     filialController =
             br.com.ifba.prg03projeto.mercado.Prg03sistemaMercadoApplication.contexto
@@ -282,68 +282,67 @@ public class EstoqueFilialView extends javax.swing.JFrame {
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
     
+        
     try {
 
-        // Verifica se existem filiais cadastradas.
         if (listaFiliais == null || listaFiliais.isEmpty()) {
             throw new RuntimeException(
                     "Cadastre pelo menos uma filial antes de cadastrar o estoque."
             );
         }
 
-        // Verifica se existem produtos cadastrados.
         if (listaProdutos == null || listaProdutos.isEmpty()) {
             throw new RuntimeException(
                     "Cadastre pelo menos um produto antes de cadastrar o estoque."
             );
         }
 
-        // Verifica se a quantidade foi preenchida.
         if (txtQuantidade.getText().isBlank()) {
-            throw new RuntimeException("A quantidade é obrigatória.");
+            throw new RuntimeException(
+                    "A quantidade é obrigatória."
+            );
         }
 
-        // Converte o valor digitado para número inteiro.
         Integer quantidade =
                 Integer.parseInt(txtQuantidade.getText().trim());
 
-        // Impede quantidade negativa.
         if (quantidade < 0) {
             throw new RuntimeException(
                     "A quantidade não pode ser negativa."
             );
         }
 
-        // Obtém os índices selecionados nos combos.
         int indiceFilial = cboFilial.getSelectedIndex();
         int indiceProduto = cboProduto.getSelectedIndex();
 
-        // Obtém os objetos relacionados aos índices selecionados.
         br.com.ifba.prg03projeto.mercado.filial.entity.Filial filialSelecionada =
                 listaFiliais.get(indiceFilial);
 
         br.com.ifba.prg03projeto.mercado.produto.entity.Produto produtoSelecionado =
                 listaProdutos.get(indiceProduto);
 
-        // Cria um novo estoque ou utiliza o estoque em edição.
-        br.com.ifba.prg03projeto.mercado.entity.EstoqueFilial estoque;
+        br.com.ifba.prg03projeto.mercado.estoquefilial.entity.EstoqueFilial estoque;
 
         if (estoqueEdicao == null) {
             estoque =
-                    new br.com.ifba.prg03projeto.mercado.entity.EstoqueFilial();
+                    new br.com.ifba.prg03projeto.mercado.estoquefilial.entity.EstoqueFilial();
         } else {
             estoque = estoqueEdicao;
         }
 
-        // Preenche os dados do estoque.
         estoque.setFilial(filialSelecionada);
         estoque.setProduto(produtoSelecionado);
         estoque.setQuantidade(quantidade);
 
-        // Salva o estoque.
-        estoqueFilialController.salvar(estoque);
+        if (estoqueEdicao == null) {
+            estoqueFilialController.save(estoque);
+        } else {
+            estoqueFilialController.update(
+                    estoqueEdicao.getId(),
+                    estoque
+            );
+        }
 
-        // Atualiza a tabela e limpa o formulário.
         carregarTabela();
         limparCampos();
 
@@ -372,6 +371,7 @@ public class EstoqueFilialView extends javax.swing.JFrame {
                 javax.swing.JOptionPane.ERROR_MESSAGE
         );
     }
+    
     }//GEN-LAST:event_btnSalvarActionPerformed
 
     private void btnLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparActionPerformed
@@ -397,35 +397,26 @@ public class EstoqueFilialView extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAtualizarActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-
-    // Obtém a linha selecionada.
-    int linha = tblEstoques.getSelectedRow();
+        
+         int linha = tblEstoques.getSelectedRow();
 
     if (linha >= 0) {
 
-        // Obtém o ID da primeira coluna.
         Long id = Long.parseLong(
                 tblEstoques.getValueAt(linha, 0).toString()
         );
 
-        // Busca o registro completo pelo ID.
-        org.springframework.http.ResponseEntity<br.com.ifba.prg03projeto.mercado.entity.EstoqueFilial> resposta =
-                estoqueFilialController.buscarPorId(id);
-
-        br.com.ifba.prg03projeto.mercado.entity.EstoqueFilial estoque =
-                resposta.getBody();
+        br.com.ifba.prg03projeto.mercado.estoquefilial.entity.EstoqueFilial estoque =
+                estoqueFilialController.findById(id).orElse(null);
 
         if (estoque != null) {
 
-            // Guarda o registro que está sendo editado.
             estoqueEdicao = estoque;
 
-            // Preenche a quantidade.
             txtQuantidade.setText(
                     String.valueOf(estoque.getQuantidade())
             );
 
-            // Seleciona no combo a filial do estoque.
             for (int i = 0; i < listaFiliais.size(); i++) {
 
                 if (listaFiliais.get(i).getId()
@@ -436,7 +427,6 @@ public class EstoqueFilialView extends javax.swing.JFrame {
                 }
             }
 
-            // Seleciona no combo o produto do estoque.
             for (int i = 0; i < listaProdutos.size(); i++) {
 
                 if (listaProdutos.get(i).getId()
@@ -467,18 +457,16 @@ public class EstoqueFilialView extends javax.swing.JFrame {
                 "Aviso",
                 javax.swing.JOptionPane.WARNING_MESSAGE
         );
-    }    
+    }
         
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnRemoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoverActionPerformed
     
-    // Obtém a linha selecionada.
-    int linha = tblEstoques.getSelectedRow();
+   int linha = tblEstoques.getSelectedRow();
 
     if (linha >= 0) {
 
-        // Solicita confirmação.
         int confirmacao = javax.swing.JOptionPane.showConfirmDialog(
                 this,
                 "Tem certeza que deseja remover este estoque?",
@@ -488,17 +476,14 @@ public class EstoqueFilialView extends javax.swing.JFrame {
 
         if (confirmacao == javax.swing.JOptionPane.YES_OPTION) {
 
-            // Obtém o ID selecionado.
             Long id = Long.parseLong(
                     tblEstoques.getValueAt(linha, 0).toString()
             );
 
             try {
 
-                // Remove o registro.
-                estoqueFilialController.deletar(id);
+                estoqueFilialController.delete(id);
 
-                // Atualiza a tabela e limpa o formulário.
                 carregarTabela();
                 limparCampos();
 
@@ -528,7 +513,7 @@ public class EstoqueFilialView extends javax.swing.JFrame {
                 "Aviso",
                 javax.swing.JOptionPane.WARNING_MESSAGE
         );
-    }    
+    }
         
     }//GEN-LAST:event_btnRemoverActionPerformed
 
@@ -572,4 +557,5 @@ public class EstoqueFilialView extends javax.swing.JFrame {
     private javax.swing.JTable tblEstoques;
     private javax.swing.JTextField txtQuantidade;
     // End of variables declaration//GEN-END:variables
+
 }
