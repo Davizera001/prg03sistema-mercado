@@ -4,6 +4,8 @@
  */
 package br.com.ifba.prg03projeto.mercado.dashboard.view;
 import br.com.ifba.prg03projeto.mercado.venda.view.VendaView;
+import br.com.ifba.prg03projeto.mercado.usuario.entity.Usuario;
+import br.com.ifba.prg03projeto.mercado.usuario.session.SessaoUsuario;
 
 /**
  *
@@ -17,7 +19,37 @@ public class DashboardView extends javax.swing.JFrame {
      * Creates new form DashboardView
      */
     public DashboardView() {
+    
         initComponents();
+
+        setLocationRelativeTo(null);
+
+        applyPermissions();
+    }
+    
+    private void applyPermissions() {
+
+        Usuario loggedUser = SessaoUsuario.getUsuarioLogado();
+
+        if (loggedUser == null) {
+            throw new RuntimeException(
+                    "No user is logged in."
+            );
+        }
+
+        boolean isManager =
+                "GERENTE".equals(loggedUser.getPerfil());
+
+        btnUsuarios.setEnabled(isManager);
+        btnProdutos.setEnabled(isManager);
+        btnFiliais.setEnabled(isManager);
+        btnEstoques.setEnabled(isManager);
+        btnSolicitacoes.setEnabled(isManager);
+
+        // Módulos permitidos para ambos
+        btnVendas.setEnabled(true);
+        btnItensVenda.setEnabled(true);
+        btnPagamentos1.setEnabled(true);
     }
 
     /**
@@ -191,10 +223,9 @@ public class DashboardView extends javax.swing.JFrame {
 
     private void btnPagamentos1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPagamentos1ActionPerformed
     
-        javax.swing.JOptionPane.showMessageDialog(
-            this,
-            "Módulo em desenvolvimento."
-    );
+    VendaView tela = new VendaView();
+    tela.setLocationRelativeTo(this);
+    tela.setVisible(true);
     }//GEN-LAST:event_btnPagamentos1ActionPerformed
 
     private void btnVendasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVendasActionPerformed
@@ -206,10 +237,9 @@ public class DashboardView extends javax.swing.JFrame {
 
     private void btnItensVendaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnItensVendaActionPerformed
     
-        javax.swing.JOptionPane.showMessageDialog(
-            this,
-            "Módulo em desenvolvimento."
-    );
+        VendaView tela = new VendaView();
+        tela.setLocationRelativeTo(this);
+        tela.setVisible(true);
     }//GEN-LAST:event_btnItensVendaActionPerformed
 
     private void btnSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSairActionPerformed

@@ -21,12 +21,14 @@ public class PagamentoController {
     public Pagamento registrarPagamento(
             Long vendaId,
             String formaPagamento,
-            BigDecimal valorPago
+            BigDecimal valorPago,
+            Integer numeroParcelas
     ) {
         return pagamentoService.registrarPagamento(
                 vendaId,
                 formaPagamento,
-                valorPago
+                valorPago,
+                numeroParcelas
         );
     }
 

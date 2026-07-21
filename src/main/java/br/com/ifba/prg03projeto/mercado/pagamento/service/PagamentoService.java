@@ -10,7 +10,8 @@ public interface PagamentoService {
     Pagamento registrarPagamento(
             Long vendaId,
             String formaPagamento,
-            BigDecimal valorPago
+            BigDecimal valorPago,
+            Integer numeroParcelas
     );
 
     List<Pagamento> findAll();

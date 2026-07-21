@@ -52,6 +52,7 @@ public class PagamentoView extends javax.swing.JFrame {
     lblVenda.setText("Venda: " + vendaId);
 
     loadVenda();
+    atualizarCamposPagamento();
     loadTable();
     txtValorPago.setEditable(true);
     txtValorPago.setEnabled(true);
@@ -60,9 +61,51 @@ public class PagamentoView extends javax.swing.JFrame {
     
     private void clearForm() {
     cboFormaPagamento.setSelectedItem("DINHEIRO");
+    cboParcelas.setSelectedItem("1");
+
     txtValorPago.setText("");
     txtTroco.setText("");
+
+    atualizarCamposPagamento();
     }
+    
+    private void atualizarCamposPagamento() {
+    String forma =
+            cboFormaPagamento
+                    .getSelectedItem()
+                    .toString();
+
+    boolean dinheiro =
+            "DINHEIRO".equals(forma);
+
+    boolean credito =
+            "CARTAO_CREDITO".equals(forma);
+
+    lblParcelas.setVisible(credito);
+    cboParcelas.setVisible(credito);
+
+    if (!credito) {
+        cboParcelas.setSelectedItem("1");
+    }
+
+    if (dinheiro) {
+        txtValorPago.setEditable(true);
+        txtValorPago.setText("");
+        txtTroco.setVisible(true);
+        lblTroco.setVisible(true);
+        txtTroco.setText("");
+    } else {
+        txtValorPago.setEditable(false);
+        txtValorPago.setText(
+                txtValorTotal.getText()
+        );
+
+        txtTroco.setText("0,00");
+
+        txtTroco.setVisible(false);
+        lblTroco.setVisible(false);
+    }
+}
     
     private void loadVenda() {
     Venda venda = vendaController.findById(vendaId)
@@ -104,17 +147,28 @@ public class PagamentoView extends javax.swing.JFrame {
         }
 
         model.addRow(new Object[]{
-            pagamento.getId(),
-            pagamento.getVenda().getId(),
-            pagamento.getFormaPagamento(),
-            pagamento.getValorPago(),
-            pagamento.getTroco(),
-            dataFormatada
-        });
+        pagamento.getId(),
+        pagamento.getVenda().getId(),
+        pagamento.getFormaPagamento(),
+        pagamento.getValorPago(),
+        pagamento.getTroco(),
+        pagamento.getNumeroParcelas(),
+        dataFormatada
+    });
     }
 }
     
     private void calcularTrocoVisual() {
+        String forma =
+            cboFormaPagamento
+                    .getSelectedItem()
+                    .toString();
+
+    if (!"DINHEIRO".equals(forma)) {
+        txtTroco.setText("0,00");
+        return;
+    }
+
     try {
         BigDecimal valorTotal = new BigDecimal(
                 txtValorTotal.getText()
@@ -126,16 +180,23 @@ public class PagamentoView extends javax.swing.JFrame {
                         .replace(",", ".")
         );
 
+        if (valorPago.compareTo(valorTotal) < 0) {
+            txtTroco.setText("0,00");
+            return;
+        }
+
         BigDecimal troco =
                 valorPago.subtract(valorTotal);
 
         txtTroco.setText(
-                troco.toString().replace(".", ",")
+                troco.toString()
+                        .replace(".", ",")
         );
 
     } catch (NumberFormatException exception) {
         txtTroco.setText("");
     }
+    
 }
 
     /**
@@ -162,6 +223,8 @@ public class PagamentoView extends javax.swing.JFrame {
         btnAtualizar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblPagamentos = new javax.swing.JTable();
+        lblParcelas = new javax.swing.JLabel();
+        cboParcelas = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -185,6 +248,7 @@ public class PagamentoView extends javax.swing.JFrame {
         });
 
         cboFormaPagamento.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "DINHEIRO", "PIX", "CARTAO_DEBITO", "CARTAO_CREDITO" }));
+        cboFormaPagamento.addActionListener(this::cboFormaPagamentoActionPerformed);
 
         btnPagar.setText("PAGAR");
         btnPagar.addActionListener(this::btnPagarActionPerformed);
@@ -197,17 +261,17 @@ public class PagamentoView extends javax.swing.JFrame {
 
         tblPagamentos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null}
             },
             new String [] {
-                "ID", "Venda", "Forma", "Valor Pago", "Troco", "Data"
+                "ID", "Venda", "Forma", "Valor Pago", "Troco", "Parcelas", "Data"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false
+                false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -219,6 +283,10 @@ public class PagamentoView extends javax.swing.JFrame {
         jScrollPane1.setViewportView(tblPagamentos);
         tblPagamentos.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
+        lblParcelas.setText("Parcelas:");
+
+        cboParcelas.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12" }));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -226,35 +294,42 @@ public class PagamentoView extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(84, 84, 84)
+                        .addGap(82, 82, 82)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(87, 87, 87)
-                                .addComponent(lblTitulo))
-                            .addComponent(lblFormaPagamento)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(lblValorTotal)
-                                .addGap(18, 18, 18)
-                                .addComponent(txtValorTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(lblValorPago)
                             .addComponent(lblTroco)
-                            .addComponent(lblVenda)
-                            .addComponent(txtTroco, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(txtValorPago, javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(cboFormaPagamento, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addComponent(txtTroco, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(174, 174, 174)
+                        .addGap(172, 172, 172)
                         .addComponent(btnPagar)
                         .addGap(18, 18, 18)
                         .addComponent(btnLimpar))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(52, 52, 52)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(202, 202, 202)
+                        .addComponent(btnAtualizar))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(layout.createSequentialGroup()
+                            .addContainerGap()
+                            .addComponent(txtValorPago, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                            .addGap(84, 84, 84)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(lblParcelas)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addGap(87, 87, 87)
+                                    .addComponent(lblTitulo))
+                                .addComponent(lblFormaPagamento)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(lblValorTotal)
+                                    .addGap(18, 18, 18)
+                                    .addComponent(txtValorTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(lblVenda)
+                                .addComponent(cboFormaPagamento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(cboParcelas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(204, 204, 204)
-                        .addComponent(btnAtualizar)))
-                .addContainerGap(57, Short.MAX_VALUE))
+                        .addGap(36, 36, 36)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(41, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -272,6 +347,10 @@ public class PagamentoView extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(cboFormaPagamento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
+                .addComponent(lblParcelas)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(cboParcelas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
                 .addComponent(lblValorPago)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtValorPago, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -287,7 +366,7 @@ public class PagamentoView extends javax.swing.JFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 402, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnAtualizar)
-                .addContainerGap(17, Short.MAX_VALUE))
+                .addGap(33, 33, 33))
         );
 
         pack();
@@ -310,8 +389,7 @@ public class PagamentoView extends javax.swing.JFrame {
     }//GEN-LAST:event_txtValorPagoKeyReleased
 
     private void btnPagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPagarActionPerformed
-    
-        try {
+     try {
         String formaPagamento =
                 cboFormaPagamento
                         .getSelectedItem()
@@ -322,10 +400,21 @@ public class PagamentoView extends javax.swing.JFrame {
                         .replace(",", ".")
         );
 
+        Integer numeroParcelas = 1;
+
+        if ("CARTAO_CREDITO".equals(formaPagamento)) {
+            numeroParcelas = Integer.valueOf(
+                    cboParcelas
+                            .getSelectedItem()
+                            .toString()
+            );
+        }
+
         pagamentoController.registrarPagamento(
                 vendaId,
                 formaPagamento,
-                valorPago
+                valorPago,
+                numeroParcelas
         );
 
         loadVenda();
@@ -353,6 +442,7 @@ public class PagamentoView extends javax.swing.JFrame {
                 JOptionPane.ERROR_MESSAGE
         );
     }
+       
     }//GEN-LAST:event_btnPagarActionPerformed
 
     private void btnLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparActionPerformed
@@ -360,13 +450,20 @@ public class PagamentoView extends javax.swing.JFrame {
         clearForm();
     }//GEN-LAST:event_btnLimparActionPerformed
 
+    private void cboFormaPagamentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboFormaPagamentoActionPerformed
+    
+         atualizarCamposPagamento();
+    }//GEN-LAST:event_cboFormaPagamentoActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAtualizar;
     private javax.swing.JButton btnLimpar;
     private javax.swing.JButton btnPagar;
     private javax.swing.JComboBox<String> cboFormaPagamento;
+    private javax.swing.JComboBox<String> cboParcelas;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblFormaPagamento;
+    private javax.swing.JLabel lblParcelas;
     private javax.swing.JLabel lblTitulo;
     private javax.swing.JLabel lblTroco;
     private javax.swing.JLabel lblValorPago;

@@ -34,7 +34,8 @@ public class PagamentoServiceImpl implements PagamentoService {
     public Pagamento registrarPagamento(
             Long vendaId,
             String formaPagamento,
-            BigDecimal valorPago
+            BigDecimal valorPago,
+            Integer numeroParcelas
     ) {
         Venda venda = vendaRepository.findById(vendaId)
                 .orElseThrow(() ->
@@ -43,7 +44,17 @@ public class PagamentoServiceImpl implements PagamentoService {
 
         validarVenda(venda);
         validarFormaPagamento(formaPagamento);
-        validarValorPago(valorPago, venda.getValorTotal());
+
+        validarValorPago(
+                formaPagamento,
+                valorPago,
+                venda.getValorTotal()
+        );
+
+        Integer parcelas = validarParcelas(
+                formaPagamento,
+                numeroParcelas
+        );
 
         if (pagamentoRepository.existsByVendaId(vendaId)) {
             throw new RuntimeException(
@@ -51,9 +62,13 @@ public class PagamentoServiceImpl implements PagamentoService {
             );
         }
 
-        BigDecimal troco = valorPago.subtract(
-                venda.getValorTotal()
-        );
+        BigDecimal troco = BigDecimal.ZERO;
+
+        if ("DINHEIRO".equals(formaPagamento)) {
+            troco = valorPago.subtract(
+                    venda.getValorTotal()
+            );
+        }
 
         Pagamento pagamento = new Pagamento();
 
@@ -61,6 +76,7 @@ public class PagamentoServiceImpl implements PagamentoService {
         pagamento.setFormaPagamento(formaPagamento);
         pagamento.setValorPago(valorPago);
         pagamento.setTroco(troco);
+        pagamento.setNumeroParcelas(parcelas);
         pagamento.setVenda(venda);
 
         Pagamento pagamentoSalvo =
@@ -90,12 +106,11 @@ public class PagamentoServiceImpl implements PagamentoService {
     @Override
     @Transactional
     public void delete(Long id) {
-        Pagamento pagamento = pagamentoRepository.findById(id)
-                .orElseThrow(() ->
-                        new RuntimeException(
-                                "Pagamento não encontrado."
-                        )
-                );
+        if (!pagamentoRepository.existsById(id)) {
+            throw new RuntimeException(
+                    "Pagamento não encontrado."
+            );
+        }
 
         throw new RuntimeException(
                 "Pagamentos concluídos não podem ser excluídos."
@@ -128,7 +143,9 @@ public class PagamentoServiceImpl implements PagamentoService {
         }
     }
 
-    private void validarFormaPagamento(String formaPagamento) {
+    private void validarFormaPagamento(
+            String formaPagamento
+    ) {
         if (formaPagamento == null
                 || formaPagamento.isBlank()) {
 
@@ -151,6 +168,7 @@ public class PagamentoServiceImpl implements PagamentoService {
     }
 
     private void validarValorPago(
+            String formaPagamento,
             BigDecimal valorPago,
             BigDecimal valorTotal
     ) {
@@ -158,14 +176,46 @@ public class PagamentoServiceImpl implements PagamentoService {
                 || valorPago.compareTo(BigDecimal.ZERO) <= 0) {
 
             throw new RuntimeException(
-                    "O valor pago deve ser maior que zero."
+                    "Informe um valor válido."
             );
         }
 
-        if (valorPago.compareTo(valorTotal) < 0) {
+        if ("DINHEIRO".equals(formaPagamento)) {
+            if (valorPago.compareTo(valorTotal) < 0) {
+                throw new RuntimeException(
+                        "Valor insuficiente."
+                );
+            }
+
+            return;
+        }
+
+        if (valorPago.compareTo(valorTotal) != 0) {
             throw new RuntimeException(
-                    "O valor pago não pode ser menor que o total."
+                    "PIX e cartão devem pagar exatamente "
+                    + "o valor da venda."
             );
         }
+    }
+
+    private Integer validarParcelas(
+            String formaPagamento,
+            Integer numeroParcelas
+    ) {
+        if (!"CARTAO_CREDITO".equals(formaPagamento)) {
+            return 1;
+        }
+
+        if (numeroParcelas == null
+                || numeroParcelas < 1
+                || numeroParcelas > 12) {
+
+            throw new RuntimeException(
+                    "O número de parcelas deve estar "
+                    + "entre 1 e 12."
+            );
+        }
+
+        return numeroParcelas;
     }
 }

@@ -33,6 +33,8 @@ public class Pagamento {
 
     private BigDecimal troco;
 
+    private Integer numeroParcelas;
+
     @OneToOne
     @JoinColumn(
             name = "venda_id",
