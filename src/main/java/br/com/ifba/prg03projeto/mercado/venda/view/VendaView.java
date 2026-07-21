@@ -9,6 +9,7 @@ import br.com.ifba.prg03projeto.mercado.venda.entity.Venda;
 import java.time.format.DateTimeFormatter;
 import javax.swing.table.DefaultTableModel;
 import br.com.ifba.prg03projeto.mercado.Prg03sistemaMercadoApplication;
+import br.com.ifba.prg03projeto.mercado.itemvenda.view.ItemVendaView;
 
 
 /**
@@ -132,6 +133,7 @@ public class VendaView extends javax.swing.JFrame {
         btnEditar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
         btnRemover = new javax.swing.JButton();
+        btnItens = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -192,6 +194,9 @@ public class VendaView extends javax.swing.JFrame {
         btnRemover.setText("REMOVER");
         btnRemover.addActionListener(this::btnRemoverActionPerformed);
 
+        btnItens.setText("ITENS");
+        btnItens.addActionListener(this::btnItensActionPerformed);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -213,7 +218,9 @@ public class VendaView extends javax.swing.JFrame {
                         .addGap(62, 62, 62)
                         .addComponent(btnIniciarVenda)
                         .addGap(18, 18, 18)
-                        .addComponent(btnLimpar))
+                        .addComponent(btnLimpar)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnItens))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(21, 21, 21)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -253,7 +260,8 @@ public class VendaView extends javax.swing.JFrame {
                 .addGap(33, 33, 33)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnIniciarVenda)
-                    .addComponent(btnLimpar))
+                    .addComponent(btnLimpar)
+                    .addComponent(btnItens))
                 .addGap(31, 31, 31)
                 .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -425,6 +433,38 @@ public class VendaView extends javax.swing.JFrame {
 
     }//GEN-LAST:event_btnRemoverActionPerformed
 
+    private void btnItensActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnItensActionPerformed
+    
+        try {
+        if (vendaSelecionadaId == null) {
+            throw new RuntimeException(
+                    "Selecione uma venda para gerenciar os itens."
+            );
+        }
+
+        Venda venda = vendaController.findById(vendaSelecionadaId)
+                .orElseThrow(() ->
+                        new RuntimeException("Venda não encontrada.")
+                );
+
+        if (!"EM_ANDAMENTO".equals(venda.getStatus())) {
+            throw new RuntimeException(
+                    "Somente vendas em andamento podem receber itens."
+            );
+        }
+
+        new ItemVendaView(vendaSelecionadaId).setVisible(true);
+
+    } catch (RuntimeException exception) {
+        javax.swing.JOptionPane.showMessageDialog(
+        this,
+        exception.getMessage(),
+        "Erro",
+        javax.swing.JOptionPane.ERROR_MESSAGE
+        );
+    }
+    }//GEN-LAST:event_btnItensActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -455,6 +495,7 @@ public class VendaView extends javax.swing.JFrame {
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnEditar;
     private javax.swing.JButton btnIniciarVenda;
+    private javax.swing.JButton btnItens;
     private javax.swing.JButton btnLimpar;
     private javax.swing.JButton btnRemover;
     private javax.swing.JComboBox<String> cboStatus;

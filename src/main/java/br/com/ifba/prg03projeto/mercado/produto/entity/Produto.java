@@ -21,4 +21,9 @@ public class Produto {
     private Double preco;
 
     private Integer estoqueMinimo;
+    
+    @Override
+    public String toString() {
+    return nome;
+}
 }
