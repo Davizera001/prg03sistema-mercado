@@ -94,9 +94,10 @@ public class UsuarioServiceImpl
     }
     
     @Override
-    public Usuario autenticar(
+public Usuario authenticate(
         String login,
-        String senha) {
+        String senha
+) {
 
     if (login == null || login.isBlank()) {
         throw new RuntimeException(
@@ -125,41 +126,58 @@ public class UsuarioServiceImpl
     }
 
     return usuario;
-        }
+}
 
     private void validate(
-            Usuario usuario) {
+        Usuario usuario
+    ) {
 
-        if (usuario.getNome() == null
-                || usuario.getNome().isBlank()) {
+    if (usuario == null) {
+        throw new RuntimeException(
+                "Informe os dados do usuário."
+        );
+    }
 
-            throw new RuntimeException(
-                    "O nome é obrigatório."
-            );
-        }
+    if (usuario.getNome() == null
+            || usuario.getNome().isBlank()) {
 
-        if (usuario.getLogin() == null
-                || usuario.getLogin().isBlank()) {
+        throw new RuntimeException(
+                "O nome é obrigatório."
+        );
+    }
 
-            throw new RuntimeException(
-                    "O login é obrigatório."
-            );
-        }
+    if (usuario.getLogin() == null
+            || usuario.getLogin().isBlank()) {
 
-        if (usuario.getSenha() == null
-                || usuario.getSenha().isBlank()) {
+        throw new RuntimeException(
+                "O login é obrigatório."
+        );
+    }
 
-            throw new RuntimeException(
-                    "A senha é obrigatória."
-            );
-        }
+    if (usuario.getSenha() == null
+            || usuario.getSenha().isBlank()) {
 
-        if (usuario.getPerfil() == null
-                || usuario.getPerfil().isBlank()) {
+        throw new RuntimeException(
+                "A senha é obrigatória."
+        );
+    }
 
-            throw new RuntimeException(
-                    "O perfil é obrigatório."
-            );
-        }
+    boolean validProfile =
+            "GERENTE".equals(usuario.getPerfil())
+            || "CAIXA".equals(usuario.getPerfil());
+
+    if (!validProfile) {
+        throw new RuntimeException(
+                "Perfil inválido."
+        );
+    }
+
+    usuario.setNome(
+            usuario.getNome().trim()
+    );
+
+    usuario.setLogin(
+            usuario.getLogin().trim()
+    );
     }
 }

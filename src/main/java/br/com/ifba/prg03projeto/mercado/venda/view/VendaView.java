@@ -19,6 +19,21 @@ import br.com.ifba.prg03projeto.mercado.pagamento.view.PagamentoView;
  */
 public class VendaView extends javax.swing.JFrame {
     
+    private Long getSelectedVendaId() {
+    int selectedRow = tblVendas.getSelectedRow();
+
+    if (selectedRow == -1) {
+        throw new RuntimeException(
+                "Selecione uma venda na tabela."
+        );
+    }
+
+    return ((Number) tblVendas.getValueAt(
+            selectedRow,
+            0
+    )).longValue();
+}
+    
     
     private static final java.util.logging.Logger logger =
             java.util.logging.Logger.getLogger(
@@ -444,15 +459,13 @@ public class VendaView extends javax.swing.JFrame {
     private void btnItensActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnItensActionPerformed
     
         try {
-        if (vendaSelecionadaId == null) {
-            throw new RuntimeException(
-                    "Selecione uma venda para gerenciar os itens."
-            );
-        }
+        Long vendaId = getSelectedVendaId();
 
-        Venda venda = vendaController.findById(vendaSelecionadaId)
+        Venda venda = vendaController.findById(vendaId)
                 .orElseThrow(() ->
-                        new RuntimeException("Venda não encontrada.")
+                        new RuntimeException(
+                                "Venda não encontrada."
+                        )
                 );
 
         if (!"EM_ANDAMENTO".equals(venda.getStatus())) {
@@ -461,14 +474,14 @@ public class VendaView extends javax.swing.JFrame {
             );
         }
 
-        new ItemVendaView(vendaSelecionadaId).setVisible(true);
+        new ItemVendaView(vendaId).setVisible(true);
 
     } catch (RuntimeException exception) {
         javax.swing.JOptionPane.showMessageDialog(
-        this,
-        exception.getMessage(),
-        "Erro",
-        javax.swing.JOptionPane.ERROR_MESSAGE
+                this,
+                exception.getMessage(),
+                "Erro",
+                javax.swing.JOptionPane.ERROR_MESSAGE
         );
     }
     }//GEN-LAST:event_btnItensActionPerformed
@@ -476,14 +489,9 @@ public class VendaView extends javax.swing.JFrame {
     private void btnPagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPagarActionPerformed
     
          try {
-        if (vendaSelecionadaId == null) {
-            throw new RuntimeException(
-                    "Selecione uma venda para realizar o pagamento."
-            );
-        }
+        Long vendaId = getSelectedVendaId();
 
-        Venda venda = vendaController
-                .findById(vendaSelecionadaId)
+        Venda venda = vendaController.findById(vendaId)
                 .orElseThrow(() ->
                         new RuntimeException(
                                 "Venda não encontrada."
@@ -496,8 +504,7 @@ public class VendaView extends javax.swing.JFrame {
             );
         }
 
-        new PagamentoView(vendaSelecionadaId)
-                .setVisible(true);
+        new PagamentoView(vendaId).setVisible(true);
 
     } catch (RuntimeException exception) {
         javax.swing.JOptionPane.showMessageDialog(

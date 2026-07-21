@@ -18,25 +18,44 @@ public class FilialServiceImpl implements FilialService {
             SolicitacaoReposicaoRepository solicitacaoReposicaoRepository) {
 
         this.filialRepository = filialRepository;
-        this.solicitacaoReposicaoRepository = solicitacaoReposicaoRepository;
+        this.solicitacaoReposicaoRepository =
+                solicitacaoReposicaoRepository;
     }
 
     @Override
     public Filial save(Filial filial) {
+
+        validate(filial);
+
         return filialRepository.save(filial);
     }
 
     @Override
-    public Filial update(Long id, Filial filial) {
+    public Filial update(
+            Long id,
+            Filial filial) {
 
-        Filial filialExistente = filialRepository.findById(id)
-                .orElseThrow(() ->
-                        new RuntimeException("Filial não encontrada."));
+        Filial filialExistente =
+                filialRepository.findById(id)
+                        .orElseThrow(() ->
+                                new RuntimeException(
+                                        "Filial não encontrada."
+                                )
+                        );
 
-        filialExistente.setNome(filial.getNome());
-        filialExistente.setEndereco(filial.getEndereco());
+        validate(filial);
 
-        return filialRepository.save(filialExistente);
+        filialExistente.setNome(
+                filial.getNome()
+        );
+
+        filialExistente.setEndereco(
+                filial.getEndereco()
+        );
+
+        return filialRepository.save(
+                filialExistente
+        );
     }
 
     @Override
@@ -53,10 +72,14 @@ public class FilialServiceImpl implements FilialService {
     public void delete(Long id) {
 
         if (!filialRepository.existsById(id)) {
-            throw new RuntimeException("Filial não encontrada.");
+            throw new RuntimeException(
+                    "Filial não encontrada."
+            );
         }
 
-        if (solicitacaoReposicaoRepository.existsByFilialId(id)) {
+        if (solicitacaoReposicaoRepository
+                .existsByFilialId(id)) {
+
             throw new RuntimeException(
                     "A filial não pode ser removida porque possui "
                     + "solicitações de reposição vinculadas."
@@ -64,5 +87,38 @@ public class FilialServiceImpl implements FilialService {
         }
 
         filialRepository.deleteById(id);
+    }
+
+    private void validate(Filial filial) {
+
+        if (filial == null) {
+            throw new RuntimeException(
+                    "Informe os dados da filial."
+            );
+        }
+
+        if (filial.getNome() == null
+                || filial.getNome().isBlank()) {
+
+            throw new RuntimeException(
+                    "O nome da filial é obrigatório."
+            );
+        }
+
+        if (filial.getEndereco() == null
+                || filial.getEndereco().isBlank()) {
+
+            throw new RuntimeException(
+                    "O endereço da filial é obrigatório."
+            );
+        }
+
+        filial.setNome(
+                filial.getNome().trim()
+        );
+
+        filial.setEndereco(
+                filial.getEndereco().trim()
+        );
     }
 }

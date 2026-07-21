@@ -27,12 +27,15 @@ public class UsuarioController {
 
         return usuarioService.update(id, usuario);
     }
-    
-    public Usuario autenticar(
-        String login,
-        String senha) {
 
-    return usuarioService.autenticar(login, senha);
+    public Usuario authenticate(
+            String login,
+            String senha) {
+
+        return usuarioService.authenticate(
+                login,
+                senha
+        );
     }
 
     public List<Usuario> findAll() {

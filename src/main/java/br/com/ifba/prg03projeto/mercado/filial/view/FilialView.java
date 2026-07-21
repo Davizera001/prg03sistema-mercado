@@ -244,42 +244,35 @@ private br.com.ifba.prg03projeto.mercado.filial.entity.Filial filialEdicao;
     
         try {
 
-        // Verifica se os campos obrigatórios foram preenchidos.
-        if (txtNome.getText().isBlank()) {
-            throw new RuntimeException("O nome da filial é obrigatório.");
-        }
-
-        if (txtEndereco.getText().isBlank()) {
-            throw new RuntimeException("O endereço da filial é obrigatório.");
-        }
-
-        // Cria uma nova filial ou usa a filial em edição.
         br.com.ifba.prg03projeto.mercado.filial.entity.Filial filial;
 
         if (filialEdicao == null) {
-            filial = new br.com.ifba.prg03projeto.mercado.filial.entity.Filial();
+            filial =
+                    new br.com.ifba.prg03projeto.mercado.filial.entity.Filial();
         } else {
             filial = filialEdicao;
         }
 
-        // Preenche os dados da filial.
-        filial.setNome(txtNome.getText());
-        filial.setEndereco(txtEndereco.getText());
+        filial.setNome(
+                txtNome.getText()
+        );
 
-        // Salva a filial.
+        filial.setEndereco(
+                txtEndereco.getText()
+        );
+
         if (filialEdicao == null) {
             filialController.save(filial);
         } else {
-            filialController.update(filialEdicao.getId(), filial);
-          };
+            filialController.update(
+                    filialEdicao.getId(),
+                    filial
+            );
+        }
 
-        // Atualiza a tabela.
         carregarTabela();
-
-        // Limpa os campos.
         limparCampos();
 
-        // Exibe mensagem de sucesso.
         javax.swing.JOptionPane.showMessageDialog(
                 this,
                 "Filial salva com sucesso!",
@@ -289,15 +282,14 @@ private br.com.ifba.prg03projeto.mercado.filial.entity.Filial filialEdicao;
 
     } catch (Exception e) {
 
-        // Exibe mensagem de erro.
         javax.swing.JOptionPane.showMessageDialog(
                 this,
-                "Erro ao salvar filial: " + e.getMessage(),
+                "Erro ao salvar filial: "
+                + e.getMessage(),
                 "Erro",
                 javax.swing.JOptionPane.ERROR_MESSAGE
         );
     }
-        
     }//GEN-LAST:event_btnSalvarActionPerformed
 
     private void btnAtualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtualizarActionPerformed

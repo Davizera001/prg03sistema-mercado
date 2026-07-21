@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package br.com.ifba.prg03projeto.mercado.estoquefilial.service;
 
 import br.com.ifba.prg03projeto.mercado.estoquefilial.entity.EstoqueFilial;
@@ -11,19 +7,27 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 @Service
-public class EstoqueFilialServiceImpl implements EstoqueFilialService {
+public class EstoqueFilialServiceImpl
+        implements EstoqueFilialService {
 
     private final EstoqueFilialRepository estoqueFilialRepository;
 
     public EstoqueFilialServiceImpl(
             EstoqueFilialRepository estoqueFilialRepository) {
 
-        this.estoqueFilialRepository = estoqueFilialRepository;
+        this.estoqueFilialRepository =
+                estoqueFilialRepository;
     }
 
     @Override
-    public EstoqueFilial save(EstoqueFilial estoqueFilial) {
-        return estoqueFilialRepository.save(estoqueFilial);
+    public EstoqueFilial save(
+            EstoqueFilial estoqueFilial) {
+
+        validate(estoqueFilial);
+
+        return estoqueFilialRepository.save(
+                estoqueFilial
+        );
     }
 
     @Override
@@ -39,6 +43,8 @@ public class EstoqueFilialServiceImpl implements EstoqueFilialService {
                                 )
                         );
 
+        validate(estoqueFilial);
+
         estoqueExistente.setQuantidade(
                 estoqueFilial.getQuantidade()
         );
@@ -51,7 +57,9 @@ public class EstoqueFilialServiceImpl implements EstoqueFilialService {
                 estoqueFilial.getProduto()
         );
 
-        return estoqueFilialRepository.save(estoqueExistente);
+        return estoqueFilialRepository.save(
+                estoqueExistente
+        );
     }
 
     @Override
@@ -60,7 +68,9 @@ public class EstoqueFilialServiceImpl implements EstoqueFilialService {
     }
 
     @Override
-    public Optional<EstoqueFilial> findById(Long id) {
+    public Optional<EstoqueFilial> findById(
+            Long id) {
+
         return estoqueFilialRepository.findById(id);
     }
 
@@ -74,5 +84,39 @@ public class EstoqueFilialServiceImpl implements EstoqueFilialService {
         }
 
         estoqueFilialRepository.deleteById(id);
+    }
+
+    private void validate(
+            EstoqueFilial estoqueFilial) {
+
+        if (estoqueFilial == null) {
+            throw new RuntimeException(
+                    "Informe os dados do estoque."
+            );
+        }
+
+        if (estoqueFilial.getFilial() == null) {
+            throw new RuntimeException(
+                    "A filial é obrigatória."
+            );
+        }
+
+        if (estoqueFilial.getProduto() == null) {
+            throw new RuntimeException(
+                    "O produto é obrigatório."
+            );
+        }
+
+        if (estoqueFilial.getQuantidade() == null) {
+            throw new RuntimeException(
+                    "A quantidade é obrigatória."
+            );
+        }
+
+        if (estoqueFilial.getQuantidade() < 0) {
+            throw new RuntimeException(
+                    "A quantidade não pode ser negativa."
+            );
+        }
     }
 }

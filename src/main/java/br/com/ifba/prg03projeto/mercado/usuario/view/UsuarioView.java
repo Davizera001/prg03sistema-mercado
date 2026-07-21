@@ -109,13 +109,12 @@ public class UsuarioView extends javax.swing.JFrame {
         lblSenha.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lblSenha.setText("Senha:");
 
-        txtSenha.setText("jPasswordField1");
         txtSenha.addActionListener(this::txtSenhaActionPerformed);
 
         lblPerfil.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lblPerfil.setText("Perfil:");
 
-        cboPerfil.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "CAIXA", "GERENTE", " " }));
+        cboPerfil.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "CAIXA", "GERENTE" }));
         cboPerfil.addActionListener(this::cboPerfilActionPerformed);
 
         btnSalvar.setText("Salvar");

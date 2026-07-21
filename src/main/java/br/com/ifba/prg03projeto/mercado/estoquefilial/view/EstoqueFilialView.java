@@ -281,39 +281,37 @@ public class EstoqueFilialView extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
-    
         
-    try {
+        try {
 
-        if (listaFiliais == null || listaFiliais.isEmpty()) {
+        if (listaFiliais == null
+                || listaFiliais.isEmpty()) {
+
             throw new RuntimeException(
-                    "Cadastre pelo menos uma filial antes de cadastrar o estoque."
+                    "Cadastre pelo menos uma filial "
+                    + "antes de cadastrar o estoque."
             );
         }
 
-        if (listaProdutos == null || listaProdutos.isEmpty()) {
-            throw new RuntimeException(
-                    "Cadastre pelo menos um produto antes de cadastrar o estoque."
-            );
-        }
+        if (listaProdutos == null
+                || listaProdutos.isEmpty()) {
 
-        if (txtQuantidade.getText().isBlank()) {
             throw new RuntimeException(
-                    "A quantidade é obrigatória."
+                    "Cadastre pelo menos um produto "
+                    + "antes de cadastrar o estoque."
             );
         }
 
         Integer quantidade =
-                Integer.parseInt(txtQuantidade.getText().trim());
+                Integer.parseInt(
+                        txtQuantidade.getText().trim()
+                );
 
-        if (quantidade < 0) {
-            throw new RuntimeException(
-                    "A quantidade não pode ser negativa."
-            );
-        }
+        int indiceFilial =
+                cboFilial.getSelectedIndex();
 
-        int indiceFilial = cboFilial.getSelectedIndex();
-        int indiceProduto = cboProduto.getSelectedIndex();
+        int indiceProduto =
+                cboProduto.getSelectedIndex();
 
         br.com.ifba.prg03projeto.mercado.filial.entity.Filial filialSelecionada =
                 listaFiliais.get(indiceFilial);
@@ -330,12 +328,22 @@ public class EstoqueFilialView extends javax.swing.JFrame {
             estoque = estoqueEdicao;
         }
 
-        estoque.setFilial(filialSelecionada);
-        estoque.setProduto(produtoSelecionado);
-        estoque.setQuantidade(quantidade);
+        estoque.setFilial(
+                filialSelecionada
+        );
+
+        estoque.setProduto(
+                produtoSelecionado
+        );
+
+        estoque.setQuantidade(
+                quantidade
+        );
 
         if (estoqueEdicao == null) {
-            estoqueFilialController.save(estoque);
+            estoqueFilialController.save(
+                    estoque
+            );
         } else {
             estoqueFilialController.update(
                     estoqueEdicao.getId(),
@@ -366,7 +374,8 @@ public class EstoqueFilialView extends javax.swing.JFrame {
 
         javax.swing.JOptionPane.showMessageDialog(
                 this,
-                "Erro ao salvar estoque: " + e.getMessage(),
+                "Erro ao salvar estoque: "
+                + e.getMessage(),
                 "Erro",
                 javax.swing.JOptionPane.ERROR_MESSAGE
         );

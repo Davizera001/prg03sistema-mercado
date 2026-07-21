@@ -139,7 +139,7 @@ public class LoginView extends javax.swing.JFrame {
         String senha = new String(txtSenha.getPassword());
 
         br.com.ifba.prg03projeto.mercado.usuario.entity.Usuario usuario =
-                usuarioController.autenticar(login, senha);
+                usuarioController.authenticate(login, senha);
 
         br.com.ifba.prg03projeto.mercado.usuario.session.SessaoUsuario
                 .iniciar(usuario);

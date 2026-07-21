@@ -15,8 +15,11 @@ public interface UsuarioService {
     Optional<Usuario> findById(Long id);
 
     Optional<Usuario> findByLogin(String login);
-    
-    Usuario autenticar(String login, String senha);
+
+    Usuario authenticate(
+            String login,
+            String senha
+    );
 
     void delete(Long id);
 }

@@ -148,7 +148,7 @@ public class DashboardView extends javax.swing.JFrame {
                             .addComponent(btnItensVenda)
                             .addComponent(btnVendas)))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(121, 121, 121)
+                        .addGap(23, 23, 23)
                         .addComponent(btnSair)))
                 .addContainerGap(23, Short.MAX_VALUE))
         );
