@@ -223,9 +223,13 @@ public class DashboardView extends javax.swing.JFrame {
 
     private void btnPagamentos1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPagamentos1ActionPerformed
     
-    VendaView tela = new VendaView();
-    tela.setLocationRelativeTo(this);
-    tela.setVisible(true);
+    javax.swing.JOptionPane.showMessageDialog(
+            this,
+            "Na opção de Vendas, selecione uma venda "
+            + "e clique no botão PAGAR.",
+            "Informação",
+            javax.swing.JOptionPane.INFORMATION_MESSAGE
+    );
     }//GEN-LAST:event_btnPagamentos1ActionPerformed
 
     private void btnVendasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVendasActionPerformed
@@ -237,9 +241,13 @@ public class DashboardView extends javax.swing.JFrame {
 
     private void btnItensVendaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnItensVendaActionPerformed
     
-        VendaView tela = new VendaView();
-        tela.setLocationRelativeTo(this);
-        tela.setVisible(true);
+        javax.swing.JOptionPane.showMessageDialog(
+            this,
+            "Na opção de Vendas, selecione uma venda "
+            + "e clique no botão ITENS.",
+            "Informação",
+            javax.swing.JOptionPane.INFORMATION_MESSAGE
+    );
     }//GEN-LAST:event_btnItensVendaActionPerformed
 
     private void btnSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSairActionPerformed
